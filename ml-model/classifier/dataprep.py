@@ -12,7 +12,7 @@ class DataPrep:
         """
         self.base_dir = base_dir
         self.target_size = target_size
-        
+
     def resize_images(self):
         """
         Resize all images in subfolders to the specified target size and overwrites them
@@ -33,7 +33,7 @@ class DataPrep:
                             print(f"Resized: {img_path}")
                         else:
                             print(f"Skipped (corrupted file): {img_path}")
-                            
+
 if __name__ == "__main__":
     dataprep = DataPrep(base_dir="data/val")
     dataprep.resize_images() 
