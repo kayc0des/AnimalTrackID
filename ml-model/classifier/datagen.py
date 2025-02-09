@@ -81,7 +81,7 @@ class AugmentData:
         np.savez(output_file, X=X, Y=Y)
         print(f"Saved {output_file} with {len(X)} samples.")
 
-# Example usage:
+
 augmenter = AugmentData(data_dir="data/train")
-#augmenter.process_all_classes()
-AugmentData.save_npz("data/val", "val_data.npz")
+augmenter.process_all_classes()
+AugmentData.save_npz("data/train", "train_data.npz")
