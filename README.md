@@ -10,6 +10,8 @@ Wildlife tracking is the science that facilitates identifying and interpreting t
 
 AnimalTrackID builds upon Shinoda et al. (2024) dataset to showcase the ability of machine learning models to deliver valuable insights on species while amplifying the need for a comprehensive dataset for future advancement. The project will thrive in sourcing and adding more data to the base dataset, augmenting the existing dataset, and creating an open-source dataset for public. Some notable changes have already been made to the dataset which are highlighted below:
 
+![Data Visualization](img/image.png)
+
 - `ml-model/classifier/dataprep.py`: Loads the data folder and resizes the images to 240 * 240
 - `ml-model/classifier/datagen.py`: An augmentation class augments data in different folders according to a defined rule created to handle class imbalances.
 
