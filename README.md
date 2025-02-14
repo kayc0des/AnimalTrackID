@@ -25,6 +25,28 @@ The notebook contains a `data preprocessing class` and a test CNN architecture f
 - Backend Design and Implementation
 - API Integration
 
+## Setup: Clone Repository
+
+1. **Clone the repository**:
+    ```bash
+    git clone https://github.com/kayc0des/AnimalTrackID
+    cd animaltrackid
+    ```
+
+2. **Create a virtual environment**:
+    ```bash
+    python -m venv venv
+    source venv/bin/activate   # On Windows use `venv\Scripts\activate`
+    ```
+
+3. **Install the required packages**:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4. **Run the notebook**:
+
+
 ---
 
 ## Contributors
