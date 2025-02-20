@@ -54,3 +54,11 @@ The notebook contains a `data preprocessing class` and a test CNN architecture f
 ## Contributors
 
 - [kayc0des](https://github.com/kayc0des)
+
+## Overfitting Method
+
+- Without augmentation (Compare results)
+- Overall Project Idea when presenting the product
+- Make sure transformer is working/ Kaggle or Hugging Face
+- Pretrained with non augmented data
+- Work on Mobile App
