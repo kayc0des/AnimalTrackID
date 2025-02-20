@@ -16,7 +16,7 @@ class FootprintDataset(Dataset):
 
         # Normalize images to [0,1]
         self.images /= 255.0  
-        
+
         # Encode labels if needed
         self.encoder = LabelEncoder()
         self.labels = self.encoder.fit_transform(self.labels)
@@ -38,8 +38,9 @@ class FootprintDataset(Dataset):
 
         return image, label
 
-# Define preprocessing transformations
+# Define preprocessing transformations with resizing
 train_transform = transforms.Compose([
+    transforms.Resize((224, 224)),  # Resize images to 224x224
     transforms.RandomHorizontalFlip(),
     transforms.RandomRotation(15),
     transforms.ColorJitter(brightness=0.2, contrast=0.2),
@@ -47,12 +48,13 @@ train_transform = transforms.Compose([
 ])
 
 test_transform = transforms.Compose([
+    transforms.Resize((224, 224)),  # Resize images to 224x224
     transforms.Normalize(mean=[0.5], std=[0.5])
 ])
 
 # Load Vision Transformer (ViT) model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = create_model("vit_base_patch16_224", pretrained=True, num_classes=18)
+model = create_model("vit_base_patch16_224", pretrained=True, num_classes=6)
 model = model.to(device)
 
 # Define loss function and optimizer
@@ -97,12 +99,12 @@ def evaluate_model(model, data_loader):
 
 if __name__ == '__main__':
     import torch.multiprocessing as mp
-    mp.set_start_method('spawn', force=True)  # Ensures proper multiprocessing on macOS
+    mp.set_start_method('spawn', force=True) 
 
     # Load datasets
-    train_dataset = FootprintDataset('npz/train_data.npz', transform=train_transform)
-    val_dataset = FootprintDataset('npz/val_data.npz', transform=test_transform)
-    test_dataset = FootprintDataset('npz/test_data.npz', transform=test_transform)
+    train_dataset = FootprintDataset('new/train_data.npz', transform=train_transform)
+    val_dataset = FootprintDataset('new/val_data.npz', transform=test_transform)
+    test_dataset = FootprintDataset('new/test_data.npz', transform=test_transform)
 
     # Create data loaders
     batch_size = 32
@@ -111,6 +113,6 @@ if __name__ == '__main__':
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=4)
 
     # Train and test the model
-    train_model(model, train_loader, val_loader, epochs=10)
+    train_model(model, train_loader, val_loader, epochs=20)
     test_accuracy = evaluate_model(model, test_loader)
     print(f"Test Accuracy: {test_accuracy:.4f}")
