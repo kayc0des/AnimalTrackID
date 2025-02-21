@@ -1,1 +1,1 @@
-Vision Transformer: Epoch 9: Train Loss: 0.6846, Train Acc: 0.7624, Val Loss: 1.3296, Val Acc: 0.5381
+Vision Transformer: 7: Train Loss: 1.2056, Train Acc: 0.5489, Val Loss: 1.2711, Val Acc: 0.5330
