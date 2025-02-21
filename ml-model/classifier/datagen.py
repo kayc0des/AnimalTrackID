@@ -5,7 +5,7 @@ import cv2
 import tensorflow as tf
 
 class AugmentData:
-    def __init__(self, data_dir, target_size=(240, 240)):
+    def __init__(self, data_dir, target_size=(224, 224)):
         self.data_dir = data_dir
         self.target_size = target_size
 
@@ -72,7 +72,7 @@ class AugmentData:
             for img_name in images:
                 img_path = os.path.join(class_path, img_name)
                 img = cv2.imread(img_path)
-                img = cv2.resize(img, (240, 240))
+                img = cv2.resize(img, (224, 224))
                 X.append(img)
                 Y.append(class_name.replace('_', ' ').title())
                 
@@ -82,6 +82,6 @@ class AugmentData:
         print(f"Saved {output_file} with {len(X)} samples.")
 
 
-augmenter = AugmentData(data_dir="data/train")
-augmenter.process_all_classes()
-AugmentData.save_npz("data/train", "train_data.npz")
+augmenter = AugmentData(data_dir="data/images")
+# augmenter.process_all_classes()
+AugmentData.save_npz("data/images", "npz/data.npz")
