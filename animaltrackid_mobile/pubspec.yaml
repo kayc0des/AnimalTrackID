@@ -1,7 +1,7 @@
-name: AnimalTrackID
+name: animaltrackid
 description: "An ML-Based Solution for Non-invasive Wildlife Tracking from Animal Tracks."
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+# publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
 
