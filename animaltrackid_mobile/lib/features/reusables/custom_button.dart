@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../utils/constants/fonts.dart';
 
 class CustomButton extends StatelessWidget {
   final Color buttonColor;
@@ -37,6 +38,7 @@ class CustomButton extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
+            fontFamily: FontConstants.fontFamily,
             color: textColor,
             fontSize: textSize,
             fontWeight: textWeight,
