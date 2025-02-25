@@ -7,6 +7,7 @@ import '../../utils/constants/fonts.dart';
 import '../../utils/constants/colors.dart';
 import '../home/home.dart';
 import '../reusables/custom_button.dart';
+import 'submitform.dart';
 
 class SubmitScreen extends StatelessWidget {
   const SubmitScreen({super.key});
@@ -42,7 +43,8 @@ class SubmitScreen extends StatelessWidget {
               textSize: FontConstants.body,
               textWeight: FontConstants.mediumWeight,
               onPressed: () {
-                // TODO: Add button functionality
+                Navigator.of(context).pushReplacement(
+                    FadePageRoute(page: const SubmitFormScreen()));
               },
             ),
           ],
