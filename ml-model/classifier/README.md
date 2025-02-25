@@ -1,0 +1,1 @@
+Vision Transformer: 7: Train Loss: 1.2056, Train Acc: 0.5489, Val Loss: 1.2711, Val Acc: 0.5330

@@ -1,6 +1,6 @@
 {
-    "name": "animaltrackid_mobile",
-    "short_name": "animaltrackid_mobile",
+    "name": "animaltrackid",
+    "short_name": "animaltrackid",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
