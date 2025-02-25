@@ -10,6 +10,10 @@ import '../../utils/constants/colors.dart';
 import '../../utils/constants/fonts.dart';
 import '../../utils/constants/text.dart';
 import '../reusables/transition.dart';
+import 'signup.dart';
+import '../reusables/separator.dart';
+import '../../utils/constants/icons.dart';
+import '../home/home.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -66,6 +70,22 @@ class LoginScreen extends StatelessWidget {
                         // TODO: Add button functionality
                       },
                     ),
+                    const SizedBox(height: 32),
+                    AltSeparator(),
+                    const SizedBox(height: 32),
+                    ImageButton(
+                      buttonColor: AppColors.cardColor,
+                      outlineColor: AppColors.strokeColor,
+                      text: 'Continue with Google',
+                      textColor: AppColors.textColor,
+                      textSize: FontConstants.body,
+                      textWeight: FontConstants.mediumWeight,
+                      iconPath: AppIcons.google,
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                            FadePageRoute(page: const HomeScreen()));
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -73,7 +93,8 @@ class LoginScreen extends StatelessWidget {
           ),
           AuthNavBar(
             onSignUpPressed: () {
-              // TODO: Handle sign-up navigation
+              Navigator.of(context)
+                  .pushReplacement(FadePageRoute(page: const SigninScreen()));
             },
           ),
           const SizedBox(height: 16),

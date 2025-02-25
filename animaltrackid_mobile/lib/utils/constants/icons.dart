@@ -11,4 +11,5 @@ class AppIcons {
   static const String infoIcon = 'assets/icons/info_icon.svg';
   static const String hideIcon = 'assets/icons/eye_icon.svg';
   static const String showIcon = 'assets/icons/open_eye.svg';
+  static const String google = 'assets/icons/google.svg';
 }

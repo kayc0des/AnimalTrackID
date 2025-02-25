@@ -19,7 +19,7 @@ class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: const SizedBox.shrink(),
       actions: [
         Container(
-          margin: const EdgeInsets.only(right: 16),
+          margin: const EdgeInsets.only(right: 24),
           decoration: BoxDecoration(
             color: AppColors.cardColor,
             border: Border.all(color: AppColors.strokeColor, width: 1),
