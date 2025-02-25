@@ -9,6 +9,7 @@ import '../../utils/constants/images.dart';
 import '../../utils/constants/text.dart';
 import '../auth/login.dart';
 import 'splashscreen_two.dart';
+import '../reusables/transition.dart';
 
 class SplashScreenOne extends StatelessWidget {
   const SplashScreenOne({super.key});
@@ -18,8 +19,8 @@ class SplashScreenOne extends StatelessWidget {
     return Scaffold(
       appBar: OnboardingAppBar(
         onSkipPressed: () {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => LoginScreen()));
+          Navigator.of(context)
+              .pushReplacement(FadePageRoute(page: const LoginScreen()));
         },
       ),
       body: Column(
@@ -46,7 +47,7 @@ class SplashScreenOne extends StatelessWidget {
                     headerText: AppTexts.onboardingTitleOne,
                     supportingText: AppTexts.onboardingTextOne,
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 16),
 
                   // Dots Indicator
                   Row(
@@ -96,8 +97,8 @@ class SplashScreenOne extends StatelessWidget {
               textSize: FontConstants.body,
               textWeight: FontConstants.mediumWeight,
               onPressed: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const SplashScreenTwo()));
+                Navigator.of(context).pushReplacement(
+                    FadePageRoute(page: const SplashScreenTwo()));
               },
             ),
           ),

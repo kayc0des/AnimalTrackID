@@ -8,18 +8,18 @@ import '../../utils/constants/fonts.dart';
 import '../../utils/constants/images.dart';
 import '../../utils/constants/text.dart';
 import '../auth/login.dart';
-import 'splashscreen_two.dart';
+import '../reusables/transition.dart';
 
-class SplashScreenOne extends StatelessWidget {
-  const SplashScreenOne({super.key});
+class SplashScreenThree extends StatelessWidget {
+  const SplashScreenThree({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: OnboardingAppBar(
         onSkipPressed: () {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => LoginScreen()));
+          Navigator.of(context)
+              .pushReplacement(FadePageRoute(page: const LoginScreen()));
         },
       ),
       body: Column(
@@ -35,7 +35,7 @@ class SplashScreenOne extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: Image.asset(
-                      AppImages.splashscreenOne,
+                      AppImages.splashscreenThree,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -43,38 +43,38 @@ class SplashScreenOne extends StatelessWidget {
 
                   // Text Group
                   TextGroup(
-                    headerText: AppTexts.onboardingTitleOne,
-                    supportingText: AppTexts.onboardingTextOne,
+                    headerText: AppTexts.onboardingTitleThree,
+                    supportingText: AppTexts.onboardingTextThree,
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 16),
 
                   // Dots Indicator
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: AppColors.strokeColor,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: AppColors.strokeColor,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
                         width: 24,
                         height: 8,
                         decoration: BoxDecoration(
                           color: AppColors.primaryColor,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: AppColors.strokeColor,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: AppColors.strokeColor,
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
@@ -96,8 +96,8 @@ class SplashScreenOne extends StatelessWidget {
               textSize: FontConstants.body,
               textWeight: FontConstants.mediumWeight,
               onPressed: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const SplashScreenTwo()));
+                Navigator.of(context)
+                    .pushReplacement(FadePageRoute(page: const LoginScreen()));
               },
             ),
           ),
