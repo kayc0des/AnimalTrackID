@@ -16,4 +16,5 @@ class AppIcons {
   static const String photo = 'assets/icons/photo.svg';
   static const String upload = 'assets/icons/upload.svg';
   static const String close = 'assets/icons/close.svg';
+  static const String next = 'assets/icons/next.svg';
 }
