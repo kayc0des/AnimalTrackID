@@ -7,8 +7,6 @@ import '../../utils/constants/colors.dart';
 import '../../utils/constants/fonts.dart';
 import '../../utils/constants/images.dart';
 import '../../utils/constants/text.dart';
-import '../auth/login.dart';
-import '../reusables/transition.dart';
 
 class SplashScreenThree extends StatelessWidget {
   const SplashScreenThree({super.key});
@@ -18,8 +16,7 @@ class SplashScreenThree extends StatelessWidget {
     return Scaffold(
       appBar: OnboardingAppBar(
         onSkipPressed: () {
-          Navigator.of(context)
-              .pushReplacement(FadePageRoute(page: const LoginScreen()));
+          Navigator.pushReplacementNamed(context, '/login');
         },
       ),
       body: Column(
@@ -96,8 +93,7 @@ class SplashScreenThree extends StatelessWidget {
               textSize: FontConstants.body,
               textWeight: FontConstants.mediumWeight,
               onPressed: () {
-                Navigator.of(context)
-                    .pushReplacement(FadePageRoute(page: const LoginScreen()));
+                Navigator.pushReplacementNamed(context, '/login');
               },
             ),
           ),

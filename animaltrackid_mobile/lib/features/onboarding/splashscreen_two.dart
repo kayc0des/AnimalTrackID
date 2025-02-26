@@ -7,7 +7,6 @@ import '../../utils/constants/colors.dart';
 import '../../utils/constants/fonts.dart';
 import '../../utils/constants/images.dart';
 import '../../utils/constants/text.dart';
-import '../auth/login.dart';
 import '../reusables/transition.dart';
 import 'splashscreen_three.dart';
 
@@ -19,8 +18,7 @@ class SplashScreenTwo extends StatelessWidget {
     return Scaffold(
       appBar: OnboardingAppBar(
         onSkipPressed: () {
-          Navigator.of(context)
-              .pushReplacement(FadePageRoute(page: const LoginScreen()));
+          Navigator.pushReplacementNamed(context, '/onboarding3');
         },
       ),
       body: Column(

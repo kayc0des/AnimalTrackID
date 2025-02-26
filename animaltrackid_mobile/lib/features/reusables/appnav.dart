@@ -18,21 +18,24 @@ class AppNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
         color: AppColors.cardColor,
         border: Border(
           top: BorderSide(color: AppColors.strokeColor, width: 1),
         ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _buildNavItem(AppIcons.homeIcon, "Home", '/home'),
-          _buildNavItem(AppIcons.trackIcon, "Track", '/track'),
-          _buildNavItem(AppIcons.submitIcon, "Submit", '/submit'),
-          _buildNavItem(AppIcons.profileIcon, "Profile", '/profile'),
-        ],
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(48, 0, 48, 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildNavItem(AppIcons.homeIcon, "Home", '/home'),
+            _buildNavItem(AppIcons.trackIcon, "Track", '/track'),
+            _buildNavItem(AppIcons.submitIcon, "Submit", '/submit'),
+            _buildNavItem(AppIcons.profileIcon, "Profile", '/profile'),
+          ],
+        ),
       ),
     );
   }
