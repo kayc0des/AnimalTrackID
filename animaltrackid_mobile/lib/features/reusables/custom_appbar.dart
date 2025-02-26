@@ -89,6 +89,7 @@ class ReturnAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 //------- Home App Bar------//
+
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onBackPressed;
 
@@ -100,14 +101,27 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      leading: IconButton(
-        onPressed: onBackPressed,
-        icon: SvgPicture.asset(
-          AppIcons.menuIcon,
-          width: 24,
-          height: 24,
-          colorFilter:
-              const ColorFilter.mode(AppColors.primaryColor, BlendMode.srcIn),
+      title: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Left Icon (Menu Button)
+            IconButton(
+              onPressed: onBackPressed,
+              iconSize: 24,
+              icon: SvgPicture.asset(
+                AppIcons.menuIcon,
+                width: 24,
+                height: 24,
+                colorFilter: const ColorFilter.mode(
+                    AppColors.primaryColor, BlendMode.srcIn),
+              ),
+            ),
+
+            // Placeholder for future elements (if needed)
+            const SizedBox(),
+          ],
         ),
       ),
     );
@@ -130,14 +144,18 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.transparent,
       elevation: 0,
       actions: [
-        IconButton(
-          onPressed: onInfoPressed,
-          icon: SvgPicture.asset(
-            AppIcons.infoIcon,
-            width: 24,
-            height: 24,
-            colorFilter:
-                const ColorFilter.mode(AppColors.textColor, BlendMode.srcIn),
+        Container(
+          padding: const EdgeInsets.only(right: 16),
+          child: IconButton(
+            onPressed: onInfoPressed,
+            iconSize: 24,
+            icon: SvgPicture.asset(
+              AppIcons.infoIcon,
+              width: 24,
+              height: 24,
+              colorFilter:
+                  const ColorFilter.mode(AppColors.textColor, BlendMode.srcIn),
+            ),
           ),
         ),
       ],

@@ -28,14 +28,17 @@ class ProfileScreen extends StatelessWidget {
                   'Your track has been recorded, find below a classification report.',
             ),
             const SizedBox(height: 24),
-            CustomButton(
-              buttonColor: AppColors.primaryColor,
-              outlineColor: null,
-              text: 'Learn More',
-              textColor: AppColors.whiteColor,
+            ImageButton(
+              buttonColor: AppColors.cardColor,
+              outlineColor: AppColors.strokeColor,
+              text: 'Logout',
+              textColor: AppColors.textColor,
               textSize: FontConstants.body,
               textWeight: FontConstants.mediumWeight,
-              onPressed: () {},
+              iconPath: null,
+              onPressed: () {
+                // TODO: Add button functionality
+              },
             ),
           ],
         ),
