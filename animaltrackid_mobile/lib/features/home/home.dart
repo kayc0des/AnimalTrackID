@@ -1,9 +1,8 @@
-// lib/features/onboarding/builds.dart
+// lib/features/home/home.dart
 import 'package:flutter/material.dart';
 import '../reusables/custom_appbar.dart';
 import '../reusables/text_group.dart';
-import '../reusables/transition.dart';
-import '../submit/submit.dart';
+import '../reusables/appnav.dart';
 import '../../utils/constants/images.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -14,9 +13,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: HomeAppBar(
         onBackPressed: () {
-          Navigator.of(context).pushReplacement(
-            FadePageRoute(page: const SubmitScreen()),
-          );
+          Navigator.pushReplacementNamed(context, '/track');
         },
       ),
       body: Container(
@@ -41,6 +38,14 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: AppNavBar(
+        currentRoute: ModalRoute.of(context)?.settings.name ?? '/home',
+        onTabSelected: (route) {
+          if (route != ModalRoute.of(context)?.settings.name) {
+            Navigator.pushReplacementNamed(context, route);
+          }
+        },
       ),
     );
   }

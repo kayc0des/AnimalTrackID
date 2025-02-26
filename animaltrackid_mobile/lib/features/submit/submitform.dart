@@ -7,8 +7,6 @@ import '../reusables/text_group.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/fonts.dart';
 import '../../utils/constants/text.dart';
-import '../reusables/transition.dart';
-import 'submit.dart';
 
 class SubmitFormScreen extends StatelessWidget {
   const SubmitFormScreen({super.key});
@@ -18,9 +16,7 @@ class SubmitFormScreen extends StatelessWidget {
     return Scaffold(
       appBar: ReturnAppBar(
         onBackPressed: () {
-          Navigator.of(context).pushReplacement(
-            FadePageRoute(page: const SubmitScreen()),
-          );
+          Navigator.pushReplacementNamed(context, '/submit');
         },
       ),
       body: Container(

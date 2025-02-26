@@ -8,8 +8,6 @@ import '../reusables/text_group.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/fonts.dart';
 import '../../utils/constants/text.dart';
-import '../reusables/transition.dart';
-import 'login.dart';
 import '../reusables/separator.dart';
 
 class SigninScreen extends StatelessWidget {
@@ -20,9 +18,7 @@ class SigninScreen extends StatelessWidget {
     return Scaffold(
       appBar: ReturnAppBar(
         onBackPressed: () {
-          Navigator.of(context).pushReplacement(
-            FadePageRoute(page: const LoginScreen()),
-          );
+          Navigator.pushReplacementNamed(context, '/login');
         },
       ),
       body: Container(

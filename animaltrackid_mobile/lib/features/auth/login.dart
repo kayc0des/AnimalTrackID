@@ -1,5 +1,4 @@
 // lib/features/onboarding/builds.dart
-import 'package:animaltrackid/features/onboarding/splashscreen_one.dart';
 import 'package:flutter/material.dart';
 import '../reusables/custom_button.dart';
 import '../reusables/custom_input.dart';
@@ -10,7 +9,6 @@ import '../../utils/constants/colors.dart';
 import '../../utils/constants/fonts.dart';
 import '../../utils/constants/text.dart';
 import '../reusables/transition.dart';
-import 'signup.dart';
 import '../reusables/separator.dart';
 import '../../utils/constants/icons.dart';
 import '../home/home.dart';
@@ -23,8 +21,7 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       appBar: ReturnAppBar(
         onBackPressed: () {
-          Navigator.of(context)
-              .pushReplacement(FadePageRoute(page: const SplashScreenOne()));
+          Navigator.pushReplacementNamed(context, '/onboarding1');
         },
       ),
       body: Column(
@@ -93,8 +90,7 @@ class LoginScreen extends StatelessWidget {
           ),
           AuthNavBar(
             onSignUpPressed: () {
-              Navigator.of(context)
-                  .pushReplacement(FadePageRoute(page: const SigninScreen()));
+              Navigator.pushReplacementNamed(context, '/signup');
             },
           ),
           const SizedBox(height: 16),

@@ -27,8 +27,9 @@ class SlidePageRoute<T> extends PageRouteBuilder<T> {
 
 class FadePageRoute<T> extends PageRouteBuilder<T> {
   final Widget page;
+  final bool disableBackButton;
 
-  FadePageRoute({required this.page})
+  FadePageRoute({required this.page, this.disableBackButton = false})
       : super(
           pageBuilder: (context, animation, secondaryAnimation) => page,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -39,4 +40,15 @@ class FadePageRoute<T> extends PageRouteBuilder<T> {
           },
           transitionDuration: const Duration(milliseconds: 300),
         );
+
+  @override
+  bool get canPop => !disableBackButton;
+
+  @override
+  TickerFuture didPush() {
+    if (disableBackButton) {
+      navigator?.removeRouteBelow(this);
+    }
+    return super.didPush(); // ✅ Correct return type
+  }
 }

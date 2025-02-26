@@ -7,6 +7,7 @@ import '../../utils/constants/colors.dart';
 import '../home/home.dart';
 import '../reusables/custom_button.dart';
 import '../reusables/text_group.dart';
+import '../reusables/appnav.dart';
 
 class TrackScreen extends StatelessWidget {
   const TrackScreen({super.key});
@@ -43,6 +44,14 @@ class TrackScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: AppNavBar(
+        currentRoute: ModalRoute.of(context)?.settings.name ?? '/track',
+        onTabSelected: (route) {
+          if (route != ModalRoute.of(context)?.settings.name) {
+            Navigator.pushReplacementNamed(context, route);
+          }
+        },
       ),
     );
   }

@@ -7,7 +7,7 @@ import '../../utils/constants/fonts.dart';
 import '../../utils/constants/colors.dart';
 import '../home/home.dart';
 import '../reusables/custom_button.dart';
-import 'submitform.dart';
+import '../reusables/appnav.dart';
 
 class SubmitScreen extends StatelessWidget {
   const SubmitScreen({super.key});
@@ -43,12 +43,19 @@ class SubmitScreen extends StatelessWidget {
               textSize: FontConstants.body,
               textWeight: FontConstants.mediumWeight,
               onPressed: () {
-                Navigator.of(context).pushReplacement(
-                    FadePageRoute(page: const SubmitFormScreen()));
+                Navigator.pushReplacementNamed(context, '/adddata');
               },
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: AppNavBar(
+        currentRoute: ModalRoute.of(context)?.settings.name ?? '/submit',
+        onTabSelected: (route) {
+          if (route != ModalRoute.of(context)?.settings.name) {
+            Navigator.pushReplacementNamed(context, route);
+          }
+        },
       ),
     );
   }

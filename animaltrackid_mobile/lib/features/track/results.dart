@@ -1,10 +1,8 @@
 // lib/features/onboarding/builds.dart
 import 'package:flutter/material.dart';
 import '../reusables/custom_appbar.dart';
-import '../reusables/transition.dart';
 import '../../utils/constants/fonts.dart';
 import '../../utils/constants/colors.dart';
-import 'track.dart';
 import '../reusables/custom_button.dart';
 import '../reusables/text_group.dart';
 
@@ -16,9 +14,7 @@ class ClassificationResultScreen extends StatelessWidget {
     return Scaffold(
       appBar: ReturnAppBar(
         onBackPressed: () {
-          Navigator.of(context).pushReplacement(
-            FadePageRoute(page: const TrackScreen()),
-          );
+          Navigator.pushReplacementNamed(context, '/track');
         },
       ),
       body: Container(
