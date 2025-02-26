@@ -12,4 +12,8 @@ class AppIcons {
   static const String hideIcon = 'assets/icons/eye_icon.svg';
   static const String showIcon = 'assets/icons/open_eye.svg';
   static const String google = 'assets/icons/google.svg';
+  static const String camera = 'assets/icons/camera.svg';
+  static const String photo = 'assets/icons/photo.svg';
+  static const String upload = 'assets/icons/upload.svg';
+  static const String close = 'assets/icons/close.svg';
 }
