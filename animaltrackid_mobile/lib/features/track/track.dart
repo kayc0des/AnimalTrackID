@@ -47,7 +47,7 @@ class _TrackScreenState extends State<TrackScreen> {
         onInfoPressed: () {},
       ),
       body: Container(
-        margin: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+        margin: const EdgeInsets.fromLTRB(24, 12, 24, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
