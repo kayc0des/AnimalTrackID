@@ -1,8 +1,6 @@
+// lib/features/track/track.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import '../reusables/custom_appbar.dart';
 import '../../utils/constants/fonts.dart';
 import '../../utils/constants/colors.dart';
@@ -11,17 +9,18 @@ import '../reusables/custom_button.dart';
 import '../reusables/text_group.dart';
 import '../reusables/appnav.dart';
 import '../reusables/bottomsheet.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
-class TrackScreen extends StatefulWidget {
-  const TrackScreen({super.key});
+class TrackScreen1 extends StatefulWidget {
+  const TrackScreen1({super.key});
 
   @override
   _TrackScreenState createState() => _TrackScreenState();
 }
 
-class _TrackScreenState extends State<TrackScreen> {
+class _TrackScreenState extends State<TrackScreen1> {
   XFile? _selectedImage; // Stores selected/taken photo
-  Position? _currentPosition; // Stores the user's current location
 
   // Opens bottom sheet & handles image selection
   void _pickImage() {
@@ -39,75 +38,6 @@ class _TrackScreenState extends State<TrackScreen> {
     setState(() {
       _selectedImage = null;
     });
-  }
-
-  // Fetches the user's current location
-  Future<void> _getCurrentLocation() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Location services are disabled.")),
-      );
-      return;
-    }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Location permissions are denied.")),
-        );
-        return;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Location permissions are permanently denied.")),
-      );
-      return;
-    }
-
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-      setState(() {
-        _currentPosition = position;
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to get location: $e")),
-      );
-    }
-  }
-
-  // Sends the image and location to the FastAPI backend
-  Future<void> _classifyFootprint() async {
-    if (_selectedImage == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Please select an image first.")),
-      );
-      return;
-    }
-
-    await _getCurrentLocation(); // Fetch location before sending the request
-
-    if (_currentPosition == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to get location.")),
-      );
-      return;
-    }
-
-    // Send the image and location to the backend
-    print("Selected Image Path: ${_selectedImage!.path}");
-    print("Latitude: ${_currentPosition!.latitude}");
-    print("Longitude: ${_currentPosition!.longitude}");
-
-    // TODO: Call your FastAPI backend here
-    // Use the _selectedImage and _currentPosition to send the request
   }
 
   @override
@@ -157,8 +87,14 @@ class _TrackScreenState extends State<TrackScreen> {
               textColor: AppColors.whiteColor,
               textSize: FontConstants.body,
               textWeight: FontConstants.mediumWeight,
-              onPressed:
-                  _classifyFootprint, // Updated to use _classifyFootprint
+              onPressed: () {
+                if (_selectedImage != null) {
+                  print(
+                      "Selected Image Path: ${_selectedImage!.path}"); // Send to API
+                } else {
+                  print("No image selected");
+                }
+              },
             ),
           ],
         ),
@@ -174,7 +110,7 @@ class _TrackScreenState extends State<TrackScreen> {
     );
   }
 
-  // Upload UI (Shown when no image is selected)
+  // 📸 Upload UI (Shown when no image is selected)
   Widget _buildUploadUI() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -202,7 +138,7 @@ class _TrackScreenState extends State<TrackScreen> {
     );
   }
 
-  // Image Preview UI (Shown when an image is selected)
+  // 🖼️ Image Preview UI (Shown when an image is selected)
   Widget _buildImagePreview() {
     return Stack(
       children: [
@@ -217,7 +153,7 @@ class _TrackScreenState extends State<TrackScreen> {
           ),
         ),
 
-        // Close Icon (Top Right)
+        // ❌ Close Icon (Top Right)
         Positioned(
           top: 8,
           right: 8,
