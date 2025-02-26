@@ -13,7 +13,7 @@ class AppTexts {
 
   //------- Authentication Screens ------//
   static const String authTitleOne = 'Welcome back👋🏽';
-  static const String authTitleTwo = "Let's meet you";
+  static const String authTitleTwo = "Hi there, let's meet you!";
 
   static const String authTextOne =
       'You’ve been missed! Login to start tracking.';
