@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 from fastapi.responses import JSONResponse
 from datetime import datetime
 from services.prediction import predict_species
@@ -21,8 +21,8 @@ class PredictionResponse(BaseModel):
 @app.post("/predict", response_model=PredictionResponse)
 async def predict(
     file: UploadFile = File(...),
-    latitude: float = None,
-    longitude: float = None
+    latitude: float = Form(...),
+    longitude: float = Form(...),
 ):
     if not latitude or not longitude:
         raise HTTPException(status_code=400, detail="Latitude and longitude are required.")
