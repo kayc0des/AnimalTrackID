@@ -1,8 +1,11 @@
+// lib/features/track/track.dart
+import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import 'package:http/http.dart' as http;
 import '../reusables/custom_appbar.dart';
 import '../../utils/constants/fonts.dart';
 import '../../utils/constants/colors.dart';
@@ -11,6 +14,7 @@ import '../reusables/custom_button.dart';
 import '../reusables/text_group.dart';
 import '../reusables/appnav.dart';
 import '../reusables/bottomsheet.dart';
+import 'results.dart'; // ✅ Import the results screen
 
 class TrackScreen extends StatefulWidget {
   const TrackScreen({super.key});
@@ -20,10 +24,9 @@ class TrackScreen extends StatefulWidget {
 }
 
 class _TrackScreenState extends State<TrackScreen> {
-  XFile? _selectedImage; // Stores selected/taken photo
-  Position? _currentPosition; // Stores the user's current location
+  XFile? _selectedImage;
+  Position? _currentPosition;
 
-  // Opens bottom sheet & handles image selection
   void _pickImage() {
     PhotoPickerBottomSheet.show(context, (XFile? image) {
       if (image != null) {
@@ -34,19 +37,17 @@ class _TrackScreenState extends State<TrackScreen> {
     });
   }
 
-  // Clears the selected image
   void _clearImage() {
     setState(() {
       _selectedImage = null;
     });
   }
 
-  // Fetches the user's current location
   Future<void> _getCurrentLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Location services are disabled.")),
+        const SnackBar(content: Text("Location services are disabled.")),
       );
       return;
     }
@@ -56,7 +57,7 @@ class _TrackScreenState extends State<TrackScreen> {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Location permissions are denied.")),
+          const SnackBar(content: Text("Location permissions are denied.")),
         );
         return;
       }
@@ -64,7 +65,8 @@ class _TrackScreenState extends State<TrackScreen> {
 
     if (permission == LocationPermission.deniedForever) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Location permissions are permanently denied.")),
+        const SnackBar(
+            content: Text("Location permissions are permanently denied.")),
       );
       return;
     }
@@ -83,31 +85,65 @@ class _TrackScreenState extends State<TrackScreen> {
     }
   }
 
-  // Sends the image and location to the FastAPI backend
   Future<void> _classifyFootprint() async {
     if (_selectedImage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Please select an image first.")),
+        const SnackBar(content: Text("Please select an image first.")),
       );
       return;
     }
 
-    await _getCurrentLocation(); // Fetch location before sending the request
-
+    await _getCurrentLocation();
     if (_currentPosition == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to get location.")),
+        const SnackBar(content: Text("Failed to get location.")),
       );
       return;
     }
 
-    // Send the image and location to the backend
-    print("Selected Image Path: ${_selectedImage!.path}");
-    print("Latitude: ${_currentPosition!.latitude}");
-    print("Longitude: ${_currentPosition!.longitude}");
+    try {
+      var uri = Uri.parse("http://0.0.0.0:8000/predict");
 
-    // TODO: Call your FastAPI backend here
-    // Use the _selectedImage and _currentPosition to send the request
+      print(
+          "Sending: Latitude=${_currentPosition!.latitude}, Longitude=${_currentPosition!.longitude}");
+      print("Sending Image: ${_selectedImage!.path}");
+
+      var request = http.MultipartRequest('POST', uri)
+        ..fields['latitude'] =
+            _currentPosition!.latitude.toString() // ✅ Ensure it's a string
+        ..fields['longitude'] = _currentPosition!.longitude.toString()
+        ..files.add(
+            await http.MultipartFile.fromPath('file', _selectedImage!.path));
+
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        var responseBody = await response.stream.bytesToString();
+        var data = jsonDecode(responseBody);
+        print("API Response: $data");
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ClassificationResultScreen(
+              imagePath: _selectedImage!.path,
+              classificationData: data,
+            ),
+          ),
+        );
+      } else {
+        print(
+            "Error ${response.statusCode}: ${await response.stream.bytesToString()}");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error: ${response.statusCode}")),
+        );
+      }
+    } catch (e) {
+      print("Network Error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to connect to server: $e")),
+      );
+    }
   }
 
   @override
@@ -121,15 +157,12 @@ class _TrackScreenState extends State<TrackScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Heading and description
             TextGroupLeft(
               headerText: 'Footprints found?',
               supportingText:
                   'Take a photo of the footprint or upload a photo to get a classification report. Click on the icon at the top right to learn more',
             ),
             const SizedBox(height: 24),
-
-            // Upload Photo Container
             Center(
               child: GestureDetector(
                 onTap: _pickImage,
@@ -142,14 +175,12 @@ class _TrackScreenState extends State<TrackScreen> {
                     border: Border.all(color: AppColors.strokeColor, width: 1),
                   ),
                   child: _selectedImage == null
-                      ? _buildUploadUI() // Show upload UI
-                      : _buildImagePreview(), // Show image preview
+                      ? _buildUploadUI()
+                      : _buildImagePreview(),
                 ),
               ),
             ),
             const SizedBox(height: 24),
-
-            // Classify Button
             CustomButton(
               buttonColor: AppColors.primaryColor,
               outlineColor: null,
@@ -157,8 +188,7 @@ class _TrackScreenState extends State<TrackScreen> {
               textColor: AppColors.whiteColor,
               textSize: FontConstants.body,
               textWeight: FontConstants.mediumWeight,
-              onPressed:
-                  _classifyFootprint, // Updated to use _classifyFootprint
+              onPressed: _classifyFootprint,
             ),
           ],
         ),
@@ -174,7 +204,6 @@ class _TrackScreenState extends State<TrackScreen> {
     );
   }
 
-  // Upload UI (Shown when no image is selected)
   Widget _buildUploadUI() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -202,22 +231,18 @@ class _TrackScreenState extends State<TrackScreen> {
     );
   }
 
-  // Image Preview UI (Shown when an image is selected)
   Widget _buildImagePreview() {
     return Stack(
       children: [
-        // Selected Image (Fills Container)
         ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: Image.file(
             File(_selectedImage!.path),
             width: 240,
             height: 240,
-            fit: BoxFit.cover, // Makes image fill the container
+            fit: BoxFit.cover,
           ),
         ),
-
-        // Close Icon (Top Right)
         Positioned(
           top: 8,
           right: 8,
@@ -228,7 +253,7 @@ class _TrackScreenState extends State<TrackScreen> {
               height: 24,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white, // Background for better visibility
+                color: Colors.white,
               ),
               child: Center(
                 child: SvgPicture.asset(
