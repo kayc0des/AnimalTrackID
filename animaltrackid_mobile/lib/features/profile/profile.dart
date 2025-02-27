@@ -1,12 +1,12 @@
 // TODO: Profile Screen
 // lib/features/onboarding/builds.dart
 import 'package:flutter/material.dart';
-import '../reusables/custom_appbar.dart';
 import '../../utils/constants/fonts.dart';
 import '../../utils/constants/colors.dart';
 import '../reusables/custom_button.dart';
-import '../reusables/text_group.dart';
 import '../reusables/appnav.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../utils/constants/icons.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -14,20 +14,67 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ReturnAppBar(
-        onBackPressed: () {},
+      appBar: AppBar(
+        automaticallyImplyLeading: false, // Removes back button
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Text(
+            "Profile",
+            style: const TextStyle(
+              fontFamily: FontConstants.fontFamily,
+              fontSize: FontConstants.title,
+              fontWeight: FontConstants.bold,
+              color: AppColors.primaryColor,
+            ),
+          ),
+        ),
+        centerTitle: false,
       ),
       body: Container(
-        margin: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+        margin: const EdgeInsets.fromLTRB(24, 12, 24, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextGroupLeft(
-              headerText: 'Classification Report',
-              supportingText:
-                  'Your track has been recorded, find below a classification report.',
+            // Profile Options Container
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.cardColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                children: [
+                  _buildProfileOption(context, "My Account", () {}),
+                  _buildDivider(),
+                  _buildProfileOption(context, "Tracking History", () {}),
+                  _buildDivider(),
+                  _buildProfileOption(context, "Data Contributions", () {}),
+                ],
+              ),
             ),
             const SizedBox(height: 24),
+
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.cardColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                children: [
+                  _buildProfileOption(context, "About AnimalTrackID", () {}),
+                  _buildDivider(),
+                  _buildProfileOption(context, "Terms & Condition", () {}),
+                  _buildDivider(),
+                  _buildProfileOption(context, "App Version", () {}),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // Logout Button
             ImageButton(
               buttonColor: AppColors.cardColor,
               outlineColor: AppColors.strokeColor,
@@ -37,7 +84,7 @@ class ProfileScreen extends StatelessWidget {
               textWeight: FontConstants.mediumWeight,
               iconPath: null,
               onPressed: () {
-                // TODO: Add button functionality
+                // TODO: Add logout functionality
               },
             ),
           ],
@@ -51,6 +98,47 @@ class ProfileScreen extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+
+  // 📌 Profile Option Row (Left: Label | Right: Arrow)
+  Widget _buildProfileOption(
+      BuildContext context, String label, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                fontFamily: FontConstants.fontFamily,
+                fontSize: FontConstants.body,
+                fontWeight: FontConstants.regular,
+                color: AppColors.textColor,
+              ),
+            ),
+            SvgPicture.asset(
+              AppIcons.next,
+              width: 20,
+              height: 20,
+              colorFilter:
+                  const ColorFilter.mode(AppColors.textColor, BlendMode.srcIn),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 📌 Divider Line
+  Widget _buildDivider() {
+    return Container(
+      height: 1,
+      color: AppColors.strokeColor,
+      margin: const EdgeInsets.symmetric(horizontal: 16),
     );
   }
 }
