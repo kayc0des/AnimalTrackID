@@ -18,7 +18,7 @@ class SplashScreenOne extends StatelessWidget {
     return Scaffold(
       appBar: OnboardingAppBar(
         onSkipPressed: () {
-          Navigator.pushReplacementNamed(context, '/onboarding2');
+          Navigator.pushReplacementNamed(context, '/login');
         },
       ),
       body: Column(
