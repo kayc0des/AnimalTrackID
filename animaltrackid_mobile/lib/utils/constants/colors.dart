@@ -10,4 +10,5 @@ class AppColors {
   static const Color cardColor = Color(0xFFFAFAFA);
   static const Color strokeColor = Color(0xFFEEEEEE);
   static const Color navIconColor = Color(0xFFA6A6A6);
+  static const Color splashColor = Color(0xFF003728);
 }
