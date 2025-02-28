@@ -1,6 +1,7 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'features/onboarding/splashscreen_one.dart';
+import 'features/intro/intro_screen.dart';
 import 'features/onboarding/splashscreen_two.dart';
 import 'features/onboarding/splashscreen_three.dart';
 import 'features/auth/login.dart';
@@ -27,9 +28,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/onboarding1',
+      initialRoute: '/intro',
       onGenerateRoute: (settings) {
         switch (settings.name) {
+          case '/intro':
+            return FadePageRoute(page: const IntroScreen());
           case '/onboarding1':
             return FadePageRoute(
                 page: const SplashScreenOne(), disableBackButton: true);
@@ -54,8 +57,7 @@ class MyApp extends StatelessWidget {
           case '/profile':
             return FadePageRoute(page: const ProfileScreen());
           default:
-            return FadePageRoute(
-                page: const SplashScreenOne(), disableBackButton: true);
+            return FadePageRoute(page: const IntroScreen());
         }
       },
     );
