@@ -24,6 +24,7 @@ dev_dependencies:
   flutter_svg: ^2.0.10+1
   image_picker: ^1.0.7
   geolocator: ^10.0.0
+  lottie: ^2.3.0
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -33,6 +34,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+    - assets/logo/logo.json
 
   fonts:
     - family: Satoshi
