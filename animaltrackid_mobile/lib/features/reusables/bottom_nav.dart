@@ -50,3 +50,51 @@ class AuthNavBar extends StatelessWidget {
     );
   }
 }
+
+class SignUpNav extends StatelessWidget {
+  final VoidCallback onTermsPressed;
+
+  const SignUpNav({super.key, required this.onTermsPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          height: 1,
+          color: AppColors.strokeColor,
+        ),
+        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 48),
+          child: GestureDetector(
+            onTap: onTermsPressed,
+            child: RichText(
+              text: TextSpan(
+                text: "Please Read Our ",
+                style: const TextStyle(
+                  fontFamily: FontConstants.fontFamily,
+                  fontSize: FontConstants.body,
+                  fontWeight: FontConstants.regular,
+                  color: AppColors.textColor,
+                ),
+                children: [
+                  TextSpan(
+                    text: 'Terms & Conditions',
+                    style: const TextStyle(
+                      fontFamily: FontConstants.fontFamily,
+                      fontSize: FontConstants.body,
+                      fontWeight: FontConstants.mediumWeight,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

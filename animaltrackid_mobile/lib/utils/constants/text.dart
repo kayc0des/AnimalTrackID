@@ -18,5 +18,5 @@ class AppTexts {
   static const String authTextOne =
       'You’ve been missed! Login to start tracking.';
   static const String authTextTwo =
-      'Hi there, please make sure you fill the form below. All fields are required*';
+      'Hi Tracker!! You are few steps away from tracking.';
 }
