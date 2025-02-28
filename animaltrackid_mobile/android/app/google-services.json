@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "95916595948",
+    "project_id": "animaltrackid",
+    "storage_bucket": "animaltrackid.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:95916595948:android:1ca13e035e84637f0723c9",
+        "android_client_info": {
+          "package_name": "com.example.animaltrackid_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "95916595948-e94dcnte8s7dbgtvp1ckou0hj1g80et5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlqy2nVajLzHlku217idYpVkOc9z3Xw64"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "95916595948-e94dcnte8s7dbgtvp1ckou0hj1g80et5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "95916595948-2lv92a5m5ptl9gtb7kaebvbvndkcl1un.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "animaltrackid"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

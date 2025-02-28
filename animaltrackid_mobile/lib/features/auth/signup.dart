@@ -34,7 +34,7 @@ class SignUpScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextGroup(
-                      headerText: 'Create Account',
+                      headerText: 'Become A Tracker',
                       supportingText: AppTexts.authTextTwo,
                     ),
                     const SizedBox(height: 24),
