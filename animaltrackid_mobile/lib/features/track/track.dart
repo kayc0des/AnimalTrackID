@@ -1,4 +1,3 @@
-// lib/features/track/track.dart
 import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -14,7 +13,8 @@ import '../reusables/custom_button.dart';
 import '../reusables/text_group.dart';
 import '../reusables/appnav.dart';
 import '../reusables/bottomsheet.dart';
-import 'results.dart'; // ✅ Import the results screen
+import '../reusables/loadingscreen.dart';
+import 'results.dart';
 
 class TrackScreen extends StatefulWidget {
   const TrackScreen({super.key});
@@ -26,6 +26,7 @@ class TrackScreen extends StatefulWidget {
 class _TrackScreenState extends State<TrackScreen> {
   XFile? _selectedImage;
   Position? _currentPosition;
+  bool _isLoading = false;
 
   void _pickImage() {
     PhotoPickerBottomSheet.show(context, (XFile? image) {
@@ -101,6 +102,8 @@ class _TrackScreenState extends State<TrackScreen> {
       return;
     }
 
+    setState(() => _isLoading = true);
+
     try {
       var uri = Uri.parse("http://0.0.0.0:8000/predict");
 
@@ -109,8 +112,7 @@ class _TrackScreenState extends State<TrackScreen> {
       print("Sending Image: ${_selectedImage!.path}");
 
       var request = http.MultipartRequest('POST', uri)
-        ..fields['latitude'] =
-            _currentPosition!.latitude.toString() // ✅ Ensure it's a string
+        ..fields['latitude'] = _currentPosition!.latitude.toString()
         ..fields['longitude'] = _currentPosition!.longitude.toString()
         ..files.add(
             await http.MultipartFile.fromPath('file', _selectedImage!.path));
@@ -144,63 +146,82 @@ class _TrackScreenState extends State<TrackScreen> {
         SnackBar(content: Text("Failed to connect to server: $e")),
       );
     }
+
+    setState(() => _isLoading = false);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: InfoAppBar(
-        onInfoPressed: () {},
-      ),
-      body: Container(
-        margin: const EdgeInsets.fromLTRB(24, 12, 24, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextGroupLeft(
-              headerText: 'Footprints found?',
-              supportingText:
-                  'Take a photo of the footprint or upload a photo to get a classification report. Click on the icon at the top right to learn more',
-            ),
-            const SizedBox(height: 24),
-            Center(
-              child: GestureDetector(
-                onTap: _pickImage,
-                child: Container(
-                  width: 240,
-                  height: 240,
-                  decoration: BoxDecoration(
-                    color: AppColors.cardColor,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.strokeColor, width: 1),
-                  ),
-                  child: _selectedImage == null
-                      ? _buildUploadUI()
-                      : _buildImagePreview(),
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: InfoAppBar(
+            onInfoPressed: () {},
+          ),
+          body: Container(
+            margin: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextGroupLeft(
+                  headerText: 'Footprints found?',
+                  supportingText:
+                      'Take a photo of the footprint or upload a photo to get a classification report. Click on the icon at the top right to learn more',
                 ),
+                const SizedBox(height: 24),
+                Center(
+                  child: GestureDetector(
+                    onTap: _pickImage,
+                    child: Container(
+                      width: 240,
+                      height: 240,
+                      decoration: BoxDecoration(
+                        color: AppColors.cardColor,
+                        borderRadius: BorderRadius.circular(8),
+                        border:
+                            Border.all(color: AppColors.strokeColor, width: 1),
+                      ),
+                      child: _selectedImage == null
+                          ? _buildUploadUI()
+                          : _buildImagePreview(),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                CustomButton(
+                  buttonColor: AppColors.primaryColor,
+                  outlineColor: null,
+                  text: 'Classify Footprint',
+                  textColor: AppColors.whiteColor,
+                  textSize: FontConstants.body,
+                  textWeight: FontConstants.mediumWeight,
+                  onPressed: _classifyFootprint,
+                ),
+              ],
+            ),
+          ),
+          bottomNavigationBar: AppNavBar(
+            currentRoute: ModalRoute.of(context)?.settings.name ?? '/track',
+            onTabSelected: (route) {
+              if (route != ModalRoute.of(context)?.settings.name) {
+                Navigator.pushReplacementNamed(context, route);
+              }
+            },
+          ),
+        ),
+
+        // Fullscreen Loading Overlay
+        if (_isLoading)
+          Positioned.fill(
+            child: Container(
+              color: AppColors.loadingOverlay, // Semi-transparent background
+              child: const Center(
+                child: LoadingScreen(
+                    size: 60.0), // Use your reusable loading animation
               ),
             ),
-            const SizedBox(height: 24),
-            CustomButton(
-              buttonColor: AppColors.primaryColor,
-              outlineColor: null,
-              text: 'Classify Footprint',
-              textColor: AppColors.whiteColor,
-              textSize: FontConstants.body,
-              textWeight: FontConstants.mediumWeight,
-              onPressed: _classifyFootprint,
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: AppNavBar(
-        currentRoute: ModalRoute.of(context)?.settings.name ?? '/track',
-        onTabSelected: (route) {
-          if (route != ModalRoute.of(context)?.settings.name) {
-            Navigator.pushReplacementNamed(context, route);
-          }
-        },
-      ),
+          ),
+      ],
     );
   }
 

@@ -13,6 +13,7 @@ import '../reusables/transition.dart';
 import '../reusables/separator.dart';
 import '../../utils/constants/icons.dart';
 import '../home/home.dart';
+import '../reusables/loadingscreen.dart'; // Import LoadingScreen
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -48,7 +49,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() => _isLoading = true);
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) return;
+      if (googleUser == null) {
+        setState(() => _isLoading = false);
+        return;
+      }
 
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
@@ -70,92 +74,105 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-          content: Text(message, style: const TextStyle(color: Colors.white)),
-          backgroundColor: Colors.red),
+        content: Text(message, style: const TextStyle(color: Colors.white)),
+        backgroundColor: Colors.red,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: ReturnAppBar(
-        onBackPressed: () {
-          Navigator.pushReplacementNamed(context, '/login');
-        },
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextGroup(
-                      headerText: 'Become A Tracker',
-                      supportingText: AppTexts.authTextTwo,
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: ReturnAppBar(
+            onBackPressed: () {
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+          ),
+          body: Column(
+            children: [
+              Expanded(
+                child: Center(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextGroup(
+                          headerText: 'Become A Tracker',
+                          supportingText: AppTexts.authTextTwo,
+                        ),
+                        const SizedBox(height: 24),
+                        CustomInputField(
+                          controller: _emailController,
+                          labelText: 'Email',
+                          labelFontSize: FontConstants.body,
+                          labelFontWeight: FontConstants.mediumWeight,
+                          placeholderText: 'johndoe@example.com',
+                          placeholderFontSize: FontConstants.body,
+                          placeholderFontWeight: FontConstants.regular,
+                        ),
+                        const SizedBox(height: 16),
+                        PasswordInputField(
+                          controller: _passwordController,
+                          labelText: 'Password',
+                          labelFontSize: FontConstants.body,
+                          labelFontWeight: FontConstants.mediumWeight,
+                          placeholderText: 'Enter your password',
+                          placeholderFontSize: FontConstants.body,
+                          placeholderFontWeight: FontConstants.regular,
+                        ),
+                        const SizedBox(height: 24),
+                        CustomButton(
+                          buttonColor: AppColors.primaryColor,
+                          outlineColor: null,
+                          text: 'Create Account',
+                          textColor: AppColors.whiteColor,
+                          textSize: FontConstants.body,
+                          textWeight: FontConstants.mediumWeight,
+                          onPressed: _signUpWithEmail,
+                        ),
+                        const SizedBox(height: 32),
+                        AltSeparator(),
+                        const SizedBox(height: 32),
+                        ImageButton(
+                          buttonColor: AppColors.cardColor,
+                          outlineColor: AppColors.strokeColor,
+                          text: 'Sign up with Google',
+                          textColor: AppColors.textColor,
+                          textSize: FontConstants.body,
+                          textWeight: FontConstants.mediumWeight,
+                          iconPath: AppIcons.google,
+                          onPressed: _signInWithGoogle,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 24),
-                    CustomInputField(
-                      controller: _emailController,
-                      labelText: 'Email',
-                      labelFontSize: FontConstants.body,
-                      labelFontWeight: FontConstants.mediumWeight,
-                      placeholderText: 'johndoe@example.com',
-                      placeholderFontSize: FontConstants.body,
-                      placeholderFontWeight: FontConstants.regular,
-                    ),
-                    const SizedBox(height: 16),
-                    PasswordInputField(
-                      controller: _passwordController,
-                      labelText: 'Password',
-                      labelFontSize: FontConstants.body,
-                      labelFontWeight: FontConstants.mediumWeight,
-                      placeholderText: 'Enter your password',
-                      placeholderFontSize: FontConstants.body,
-                      placeholderFontWeight: FontConstants.regular,
-                    ),
-                    const SizedBox(height: 24),
-                    _isLoading
-                        ? const CircularProgressIndicator()
-                        : CustomButton(
-                            buttonColor: AppColors.primaryColor,
-                            outlineColor: null,
-                            text: 'Create Account',
-                            textColor: AppColors.whiteColor,
-                            textSize: FontConstants.body,
-                            textWeight: FontConstants.mediumWeight,
-                            onPressed: _signUpWithEmail,
-                          ),
-                    const SizedBox(height: 32),
-                    AltSeparator(),
-                    const SizedBox(height: 32),
-                    _isLoading
-                        ? const CircularProgressIndicator()
-                        : ImageButton(
-                            buttonColor: AppColors.cardColor,
-                            outlineColor: AppColors.strokeColor,
-                            text: 'Sign up with Google',
-                            textColor: AppColors.textColor,
-                            textSize: FontConstants.body,
-                            textWeight: FontConstants.mediumWeight,
-                            iconPath: AppIcons.google,
-                            onPressed: _signInWithGoogle,
-                          ),
-                  ],
+                  ),
                 ),
+              ),
+              SignUpNav(
+                onTermsPressed: () {
+                  Navigator.pushReplacementNamed(context, '/signup');
+                },
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        ),
+
+        // Fullscreen Loading Overlay
+        if (_isLoading)
+          Positioned.fill(
+            child: Container(
+              color: AppColors.loadingOverlay, // Semi-transparent background
+              child: const Center(
+                child: LoadingScreen(
+                    size: 60.0), // Use your reusable loading animation
               ),
             ),
           ),
-          SignUpNav(
-            onTermsPressed: () {
-              Navigator.pushReplacementNamed(context, '/signup');
-            },
-          ),
-          const SizedBox(height: 16),
-        ],
-      ),
+      ],
     );
   }
 }

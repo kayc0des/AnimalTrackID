@@ -7,6 +7,7 @@ import '../reusables/custom_button.dart';
 import '../reusables/appnav.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../utils/constants/icons.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -83,8 +84,8 @@ class ProfileScreen extends StatelessWidget {
               textSize: FontConstants.body,
               textWeight: FontConstants.mediumWeight,
               iconPath: null,
-              onPressed: () {
-                // TODO: Add logout functionality
+              onPressed: () async {
+                await _logout(context);
               },
             ),
           ],
@@ -139,6 +140,25 @@ class ProfileScreen extends StatelessWidget {
       height: 1,
       color: AppColors.strokeColor,
       margin: const EdgeInsets.symmetric(horizontal: 16),
+    );
+  }
+}
+
+Future<void> _logout(BuildContext context) async {
+  try {
+    // Sign out the user
+    await FirebaseAuth.instance.signOut();
+
+    // Navigate to the login or onboarding screen
+    Navigator.pushReplacementNamed(
+        context, '/login'); // Replace with your login route
+  } catch (e) {
+    // Handle errors (e.g., show a snackbar)
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Logout failed: $e'),
+        backgroundColor: Colors.red,
+      ),
     );
   }
 }
