@@ -17,7 +17,7 @@ class _IntroScreenState extends State<IntroScreen> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(const Duration(milliseconds: 2500), () {
+      Future.delayed(const Duration(milliseconds: 2300), () {
         if (mounted) {
           Navigator.of(context).pushReplacementNamed('/onboarding1');
         }

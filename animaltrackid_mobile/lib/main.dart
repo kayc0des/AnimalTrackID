@@ -12,11 +12,14 @@ import 'features/track/track.dart';
 import 'features/submit/submit.dart';
 import 'features/submit/submitform.dart';
 import 'features/reusables/transition.dart';
-// import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(); // Initialize Firebase
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform, // Use Firebase options
+  );
   runApp(const MyApp());
 }
 

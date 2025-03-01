@@ -1,5 +1,6 @@
-// lib/features/onboarding/builds.dart
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../reusables/custom_button.dart';
 import '../reusables/custom_input.dart';
 import '../reusables/custom_appbar.dart';
@@ -13,8 +14,66 @@ import '../reusables/separator.dart';
 import '../../utils/constants/icons.dart';
 import '../home/home.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
+
+  @override
+  _SignUpScreenState createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  // Email/Password Sign-Up
+  Future<void> _signUpWithEmail() async {
+    setState(() => _isLoading = true);
+    try {
+      await _auth.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      Navigator.of(context)
+          .pushReplacement(FadePageRoute(page: const HomeScreen()));
+    } on FirebaseAuthException catch (e) {
+      _showError(e.message ?? 'An error occurred.');
+    }
+    setState(() => _isLoading = false);
+  }
+
+  // Google Sign-In
+  Future<void> _signInWithGoogle() async {
+    setState(() => _isLoading = true);
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) return;
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await _auth.signInWithCredential(credential);
+      Navigator.of(context)
+          .pushReplacement(FadePageRoute(page: const HomeScreen()));
+    } on FirebaseAuthException catch (e) {
+      _showError(e.message ?? 'Google sign-in failed.');
+    }
+    setState(() => _isLoading = false);
+  }
+
+  // Error Display
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          content: Text(message, style: const TextStyle(color: Colors.white)),
+          backgroundColor: Colors.red),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +98,7 @@ class SignUpScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
                     CustomInputField(
+                      controller: _emailController,
                       labelText: 'Email',
                       labelFontSize: FontConstants.body,
                       labelFontWeight: FontConstants.mediumWeight,
@@ -48,6 +108,7 @@ class SignUpScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     PasswordInputField(
+                      controller: _passwordController,
                       labelText: 'Password',
                       labelFontSize: FontConstants.body,
                       labelFontWeight: FontConstants.mediumWeight,
@@ -56,33 +117,32 @@ class SignUpScreen extends StatelessWidget {
                       placeholderFontWeight: FontConstants.regular,
                     ),
                     const SizedBox(height: 24),
-                    CustomButton(
-                      buttonColor: AppColors.primaryColor,
-                      outlineColor: null,
-                      text: 'Create Account',
-                      textColor: AppColors.whiteColor,
-                      textSize: FontConstants.body,
-                      textWeight: FontConstants.mediumWeight,
-                      onPressed: () {
-                        // TODO: Add button functionality
-                      },
-                    ),
+                    _isLoading
+                        ? const CircularProgressIndicator()
+                        : CustomButton(
+                            buttonColor: AppColors.primaryColor,
+                            outlineColor: null,
+                            text: 'Create Account',
+                            textColor: AppColors.whiteColor,
+                            textSize: FontConstants.body,
+                            textWeight: FontConstants.mediumWeight,
+                            onPressed: _signUpWithEmail,
+                          ),
                     const SizedBox(height: 32),
                     AltSeparator(),
                     const SizedBox(height: 32),
-                    ImageButton(
-                      buttonColor: AppColors.cardColor,
-                      outlineColor: AppColors.strokeColor,
-                      text: 'Sign up with Google',
-                      textColor: AppColors.textColor,
-                      textSize: FontConstants.body,
-                      textWeight: FontConstants.mediumWeight,
-                      iconPath: AppIcons.google,
-                      onPressed: () {
-                        Navigator.of(context).pushReplacement(
-                            FadePageRoute(page: const HomeScreen()));
-                      },
-                    ),
+                    _isLoading
+                        ? const CircularProgressIndicator()
+                        : ImageButton(
+                            buttonColor: AppColors.cardColor,
+                            outlineColor: AppColors.strokeColor,
+                            text: 'Sign up with Google',
+                            textColor: AppColors.textColor,
+                            textSize: FontConstants.body,
+                            textWeight: FontConstants.mediumWeight,
+                            iconPath: AppIcons.google,
+                            onPressed: _signInWithGoogle,
+                          ),
                   ],
                 ),
               ),
