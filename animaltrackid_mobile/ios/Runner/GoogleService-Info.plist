@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>95916595948-4gnob7aiuk68vetqfqutjq3jmrh4fa69.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.95916595948-4gnob7aiuk68vetqfqutjq3jmrh4fa69</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB_QBqyKfFk1UELWAX61l7f8R_TTILnGNY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>95916595948</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.animaltrackidMobile</string>
+	<key>PROJECT_ID</key>
+	<string>animaltrackid</string>
+	<key>STORAGE_BUCKET</key>
+	<string>animaltrackid.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:95916595948:ios:3be92784a5e392af0723c9</string>
+</dict>
+</plist>
