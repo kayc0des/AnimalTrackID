@@ -1,6 +1,7 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'features/onboarding/splashscreen_one.dart';
+import 'features/intro/intro_screen.dart';
 import 'features/onboarding/splashscreen_two.dart';
 import 'features/onboarding/splashscreen_three.dart';
 import 'features/auth/login.dart';
@@ -11,8 +12,14 @@ import 'features/track/track.dart';
 import 'features/submit/submit.dart';
 import 'features/submit/submitform.dart';
 import 'features/reusables/transition.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform, // Use Firebase options
+  );
   runApp(const MyApp());
 }
 
@@ -27,9 +34,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/onboarding1',
+      initialRoute: '/intro',
       onGenerateRoute: (settings) {
         switch (settings.name) {
+          case '/intro':
+            return FadePageRoute(page: const IntroScreen());
           case '/onboarding1':
             return FadePageRoute(
                 page: const SplashScreenOne(), disableBackButton: true);
@@ -42,7 +51,7 @@ class MyApp extends StatelessWidget {
           case '/login':
             return FadePageRoute(page: const LoginScreen());
           case '/signup':
-            return FadePageRoute(page: const SigninScreen());
+            return FadePageRoute(page: const SignUpScreen());
           case '/adddata':
             return FadePageRoute(page: const SubmitFormScreen());
           case '/home':
@@ -54,8 +63,7 @@ class MyApp extends StatelessWidget {
           case '/profile':
             return FadePageRoute(page: const ProfileScreen());
           default:
-            return FadePageRoute(
-                page: const SplashScreenOne(), disableBackButton: true);
+            return FadePageRoute(page: const IntroScreen());
         }
       },
     );

@@ -73,7 +73,7 @@ class LoginScreen extends StatelessWidget {
                     ImageButton(
                       buttonColor: AppColors.cardColor,
                       outlineColor: AppColors.strokeColor,
-                      text: 'Continue with Google',
+                      text: 'Sign in with Google',
                       textColor: AppColors.textColor,
                       textSize: FontConstants.body,
                       textWeight: FontConstants.mediumWeight,
