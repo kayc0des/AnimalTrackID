@@ -13,6 +13,7 @@ import '../../utils/constants/text.dart';
 import '../../utils/constants/icons.dart';
 import '../home/home.dart';
 import '../reusables/loadingscreen.dart';
+import '../reusables/bottom_nav.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -149,6 +150,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
+              ),
+              AuthNavBar(
+                onSignUpPressed: () {
+                  Navigator.pushReplacementNamed(context, '/signup');
+                },
               ),
               const SizedBox(height: 16),
             ],
