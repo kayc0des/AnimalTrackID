@@ -10,11 +10,20 @@ import os
 import cloudinary
 import cloudinary.uploader
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
 app = FastAPI()
 weather_service = WeatherService()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Allow requests from Next.js app
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 cloudinary.config(
     cloud_name = os.getenv("CLOUD_NAME"),
@@ -235,6 +244,36 @@ async def get_submission_count():
         result = await conn.fetchval("SELECT COUNT(*) FROM data_submission")
 
         return {"submission_count": result}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        await conn.close()
+
+
+""" --------------- Track Species Locations --------------- """        
+        
+@app.get("/tracks-species-locations")
+async def get_species_locations():
+    """Fetch species, latitude, and longitude from tracks and structure data by species."""
+    try:
+        conn = await connect_db()
+        if not conn:
+            raise HTTPException(status_code=500, detail="Database connection failed")
+
+        query = "SELECT species, latitude, longitude FROM tracks"
+        result = await conn.fetch(query)
+
+        species_dict = {}
+        for row in result:
+            species = row["species"]
+            location = {"latitude": row["latitude"], "longitude": row["longitude"]}
+            if species in species_dict:
+                species_dict[species].append(location)
+            else:
+                species_dict[species] = [location]
+
+        return species_dict
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")

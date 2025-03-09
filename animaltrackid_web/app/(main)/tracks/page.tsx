@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { DataTable } from "@/components/ui/data-table";
-import { columns } from "./columns"; 
+import { columns } from "./columns";
 
 export interface Track {
   id: number;
@@ -24,9 +24,9 @@ export default function Page() {
   useEffect(() => {
     async function fetchTracks() {
       try {
-        const response = await fetch("/api/tracks");
+        const response = await fetch("http://localhost:8000/alltracks");
         const data = await response.json();
-        setTracks(data);
+        setTracks(data.tracks); // Extract the "tracks" array from the response
       } catch (error) {
         console.error("Error fetching tracks:", error);
       } finally {
@@ -41,7 +41,6 @@ export default function Page() {
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-xl font-bold mb-4">Tracks</h1>
       <DataTable columns={columns} data={tracks} numberOfRows={5} />
     </div>
   );
