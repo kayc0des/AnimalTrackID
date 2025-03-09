@@ -50,8 +50,8 @@ const Sidebar = ({handleClick, menuHide}: SideBarProps) => {
       icon: <Footprints strokeWidth="1.3" />,
     },
     {
-      name: "RL Agent Prediction",
-      path: "/rl",
+      name: "Footprint Prediction",
+      path: "/lstm",
       icon: <Bot strokeWidth="1.3" />,
     },
     {

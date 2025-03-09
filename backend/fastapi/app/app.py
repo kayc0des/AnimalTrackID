@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException, Form
+from fastapi import FastAPI, File, UploadFile, HTTPException, Form, Response
 from fastapi.responses import JSONResponse
 from datetime import datetime
 from services.prediction import predict_species
@@ -11,6 +11,13 @@ import cloudinary
 import cloudinary.uploader
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
+import io
+import csv
+from firebase_admin import auth
+from firebase_init import initialize_firebase  # Import the Firebase initialization function
+
+# Initialize Firebase
+initialize_firebase()
 
 load_dotenv()
 
@@ -279,3 +286,53 @@ async def get_species_locations():
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     finally:
         await conn.close()
+
+
+@app.get("/download-tracks-csv")
+async def download_tracks_csv():
+    try:
+        # Connect to the database
+        conn = await connect_db()
+        if not conn:
+            raise HTTPException(status_code=500, detail="Database connection failed")
+
+        # Fetch all rows from the tracks table
+        rows = await conn.fetch("SELECT * FROM tracks")
+
+        # Create a CSV file in memory
+        csv_file = io.StringIO()
+        csv_writer = csv.writer(csv_file)
+
+        # Write the header row
+        if rows:
+            csv_writer.writerow(rows[0].keys())
+
+        # Write the data rows
+        for row in rows:
+            csv_writer.writerow(row.values())
+
+        # Prepare the response
+        response = Response(content=csv_file.getvalue(), media_type="text/csv")
+        response.headers["Content-Disposition"] = "attachment; filename=tracks.csv"
+
+        return response
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating CSV: {str(e)}")
+    finally:
+        if conn:
+            await conn.close()
+            
+
+@app.get("/user-count")
+async def get_user_count():
+    try:
+        # List all users in Firebase Authentication
+        user_records = auth.list_users().iterate_all()
+
+        # Count the number of users
+        user_count = sum(1 for _ in user_records)
+
+        return {"user_count": user_count}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching user count: {str(e)}")

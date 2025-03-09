@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
+import { Button } from "@/components/ui/button"; // Import the Button component
 
 export interface Track {
   id: number;
@@ -37,10 +38,21 @@ export default function Page() {
     fetchTracks();
   }, []);
 
+  // Function to handle CSV download
+  const handleDownloadCSV = () => {
+    window.location.href = "http://localhost:8000/download-tracks-csv";
+  };
+
   if (loading) return <p>Loading tracks...</p>;
 
   return (
     <div className="container mx-auto py-10">
+      {/* Add the Download CSV button */}
+      <div className="mb-4">
+        <Button onClick={handleDownloadCSV}>Download CSV</Button>
+      </div>
+
+      {/* Render the DataTable */}
       <DataTable columns={columns} data={tracks} numberOfRows={5} />
     </div>
   );
