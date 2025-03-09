@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import '../reusables/custom_appbar.dart';
 import '../reusables/text_group.dart';
 import '../reusables/appnav.dart';
@@ -52,7 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     } catch (e) {
       setState(() => _isLoading = false);
-      print("Error fetching track history: $e");
     }
   }
 
