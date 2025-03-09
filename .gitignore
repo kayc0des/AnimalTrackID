@@ -1,3 +1,6 @@
 atidvenv/
 animaltrackid_mobile/iose/
 animaltrackid_mobile/ios1/
+node_modules/
+package-lock.json
+package.json

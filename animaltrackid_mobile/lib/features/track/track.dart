@@ -15,6 +15,7 @@ import '../reusables/appnav.dart';
 import '../reusables/bottomsheet.dart';
 import '../reusables/loadingscreen.dart';
 import 'results.dart';
+import '../../utils/helpers/getid.dart';
 
 class TrackScreen extends StatefulWidget {
   const TrackScreen({super.key});
@@ -124,15 +125,55 @@ class _TrackScreenState extends State<TrackScreen> {
         var data = jsonDecode(responseBody);
         print("API Response: $data");
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ClassificationResultScreen(
-              imagePath: _selectedImage!.path,
-              classificationData: data,
-            ),
-          ),
+        // Fetch the Firebase user UUID
+        String? userUUID = await getUserId(); // Call the getUserId function
+
+        if (userUUID == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("User is not signed in.")),
+          );
+          return;
+        }
+
+        // Now use the classification data to send to the 'add_track' API
+        var addTrackUri = Uri.parse("http://0.0.0.0:8000/add_track/");
+        var addTrackResponse = await http.post(
+          addTrackUri,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'user_uuid': userUUID,
+            'species': data['species_name'],
+            'latitude': data['latitude'],
+            'longitude': data['longitude'],
+            'datetime': data['datetime'],
+            'temperature': data['temperature'],
+            'humidity': data['humidity'],
+            'pressure': data['pressure'],
+            'wind_speed': data['windspeed'],
+          }),
         );
+
+        if (addTrackResponse.statusCode == 200) {
+          var addTrackData = jsonDecode(addTrackResponse.body);
+          print("Track added successfully: $addTrackData");
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ClassificationResultScreen(
+                imagePath: _selectedImage!.path,
+                classificationData: data,
+              ),
+            ),
+          );
+        } else {
+          print("Error adding track: ${addTrackResponse.statusCode}");
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(
+                    "Failed to add track: ${addTrackResponse.statusCode}")),
+          );
+        }
       } else {
         print(
             "Error ${response.statusCode}: ${await response.stream.bytesToString()}");

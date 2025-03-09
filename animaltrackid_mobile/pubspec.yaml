@@ -39,6 +39,8 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/logo/logo.json
+    - assets/logo/
+
 
   fonts:
     - family: Satoshi
