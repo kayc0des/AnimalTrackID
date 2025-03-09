@@ -16,7 +16,6 @@ def create_tables():
         )
         cur = conn.cursor()
 
-        # Create tracks table with UUID (no reference to users table)
         cur.execute("""
             CREATE TABLE IF NOT EXISTS tracks (
                 id SERIAL PRIMARY KEY,
@@ -32,7 +31,6 @@ def create_tables():
             );
         """)
 
-        # Create data_submission table with species and image URL (for linking)
         cur.execute("""
             CREATE TABLE IF NOT EXISTS data_submission (
                 id SERIAL PRIMARY KEY,
