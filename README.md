@@ -32,6 +32,8 @@ Designed for on-field trackers and local communities living close to wildlife, t
 
 - Submit new footprint samples to enhance dataset curation, aiding in the development of more accurate models.
 
+![Cloudinary](img/cloud_image_storage.png)
+
 2. Web Dashboard
 
 Built for conservationists and data analysts, the web dashboard provides the following functionalities:
@@ -87,6 +89,8 @@ AnimalTrackID is built using a modern and efficient tech stack, ensuring scalabi
 - Next.js - Powers the web dashboard, offering a fast and interactive interface for conservationists and data analysts to access classification reports and insights.
 
 - FastAPI - Used for backend development, enabling high-performance API endpoints for data submission, model inference, and retrieval of classification reports.
+
+- PostgreSQL - Used as the primary database to store classification and data submission logs
 
 This combination of technologies ensures a robust, user-friendly, and efficient wildlife tracking solution that empowers conservation efforts.
 
