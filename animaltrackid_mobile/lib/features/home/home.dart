@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'dart:async';
 import 'dart:convert';
 import '../reusables/custom_appbar.dart';
 import '../reusables/text_group.dart';
@@ -26,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchTrackHistory();
+    Future.delayed(const Duration(milliseconds: 100), _fetchTrackHistory);
   }
 
   Future<void> _fetchTrackHistory() async {
@@ -62,103 +63,107 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.pushReplacementNamed(context, '/track');
         },
       ),
-      body: Container(
-        margin: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextBoxLeft(headerText: 'Explore'),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: Image.asset(
-                AppImages.homeCard,
-                fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextBoxLeft(headerText: 'Explore'),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: Image.asset(
+                  AppImages.homeCard,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            TextBoxLeft(headerText: 'Track History'),
-            const SizedBox(height: 12),
-            _isLoading
-                ? const LoadingScreen()
-                : _tracks.isEmpty
-                    ? const Center(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 20),
-                          child: Text(
-                            "No tracks found.",
-                            style: TextStyle(
-                              fontSize: FontConstants.body,
-                              fontWeight: FontConstants.regular,
-                              color: AppColors.textColor,
+              const SizedBox(height: 24),
+              TextBoxLeft(headerText: 'Track History'),
+              const SizedBox(height: 12),
+              _isLoading
+                  ? const LoadingScreen()
+                  : _tracks.isEmpty
+                      ? const Center(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 20),
+                            child: Text(
+                              "No tracks found.",
+                              style: TextStyle(
+                                fontSize: FontConstants.body,
+                                fontWeight: FontConstants.regular,
+                                color: AppColors.textColor,
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    : Container(
-                        constraints: const BoxConstraints(
-                          maxHeight: 320, // Limits card height (~7 items)
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        decoration: BoxDecoration(
-                          color: AppColors.cardColor,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: List.generate(
-                              _tracks.length > 7 ? 7 : _tracks.length,
-                              (index) {
-                                var track = _tracks[index];
-                                return Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 12, horizontal: 16),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          // Left side: Badge icon + Species name
-                                          Row(
-                                            children: [
-                                              SvgPicture.asset(
-                                                AppIcons.badge,
-                                                width: 32,
-                                                height: 32,
-                                              ),
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                track['species'],
-                                                style: const TextStyle(
-                                                  fontSize: FontConstants.body,
-                                                  fontWeight:
-                                                      FontConstants.regular,
+                        )
+                      : Container(
+                          constraints: const BoxConstraints(
+                            maxHeight: 200, // Adjusted height for ~4 items
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            color: AppColors.cardColor,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: List.generate(
+                                _tracks.length > 4 ? 4 : _tracks.length,
+                                (index) {
+                                  var track = _tracks[index];
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12, horizontal: 16),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            // Left side: Badge icon + Species name
+                                            Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  AppIcons.badge,
+                                                  width: 32,
+                                                  height: 32,
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          // Right side: Latitude | Longitude
-                                          Text(
-                                            "${track['latitude']} | ${track['longitude']}",
-                                            style: const TextStyle(
-                                              fontSize: FontConstants.body,
-                                              fontWeight: FontConstants.regular,
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  track['species'],
+                                                  style: const TextStyle(
+                                                    fontSize:
+                                                        FontConstants.body,
+                                                    fontWeight:
+                                                        FontConstants.regular,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                        ],
+                                            // Right side: Latitude | Longitude
+                                            Text(
+                                              "${track['latitude']} | ${track['longitude']}",
+                                              style: const TextStyle(
+                                                fontSize: FontConstants.body,
+                                                fontWeight:
+                                                    FontConstants.regular,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    if (index != _tracks.length - 1)
-                                      _buildDivider(),
-                                  ],
-                                );
-                              },
+                                      if (index != _tracks.length - 1)
+                                        _buildDivider(),
+                                    ],
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),
-                      ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: AppNavBar(
@@ -172,7 +177,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // 📌 Divider Line
   Widget _buildDivider() {
     return Container(
       height: 1,

@@ -16,9 +16,9 @@ class LoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor ?? Colors.white,
-      body: Center(
+    return Container(
+      color: backgroundColor ?? Colors.white, // Background color
+      child: Center(
         child: LoadingAnimationWidget.fourRotatingDots(
           color: dotColor ?? AppColors.primaryColor,
           size: size,
