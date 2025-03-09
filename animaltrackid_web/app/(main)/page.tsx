@@ -10,6 +10,7 @@ import DashboardGreeting from "@/components/Dashboard/DashboardGreeting";
 export default function Home() {
   const [submissionCount, setSubmissionCount] = useState<number | null>(null);
   const [trackCount, setTrackCount] = useState<number | null>(null);
+  const [userCount, setUserCount] = useState<number | null>(null); // New state for user count
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,6 +25,11 @@ export default function Home() {
         const trackResponse = await fetch("http://localhost:8000/counttracks");
         const trackData = await trackResponse.json();
         setTrackCount(trackData.track_count);
+
+        // Fetch user count
+        const userResponse = await fetch("http://localhost:8000/user-count");
+        const userData = await userResponse.json();
+        setUserCount(userData.user_count);
       } catch (error) {
         console.error("Error fetching counts:", error);
       } finally {
@@ -72,7 +78,7 @@ export default function Home() {
         />
         <DashboardCard
           title="Total Users"
-          count={20}
+          count={userCount || 0} // Fallback to 0 if userCount is null
           percentage={0.63}
           icon={
             <div className="cardIcon bg-successGreen rounded-full p-6">
