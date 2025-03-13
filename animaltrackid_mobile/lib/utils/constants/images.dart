@@ -13,4 +13,7 @@ class AppImages {
   //------- In-app Card ------//
   static const String homeCard = 'assets/images/home_card.png';
   static const String submitCard = 'assets/images/submit_card.png';
+
+  //------- Submitted Card ------//
+  static const String paw = 'assets/images/paw.png';
 }

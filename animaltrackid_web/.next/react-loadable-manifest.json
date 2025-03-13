@@ -1,1 +1,9 @@
-{}
+{
+  "app/(main)/page.tsx -> @/components/Dashboard/DashboardMap": {
+    "id": "app/(main)/page.tsx -> @/components/Dashboard/DashboardMap",
+    "files": [
+      "static/css/_app-pages-browser_components_Dashboard_DashboardMap_tsx.css",
+      "static/chunks/_app-pages-browser_components_Dashboard_DashboardMap_tsx.js"
+    ]
+  }
+}
