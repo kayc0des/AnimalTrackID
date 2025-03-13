@@ -14,7 +14,7 @@ class SuccessScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
-              'assets/logo/tick.gif',
+              'assets/images/paw.png',
               width: 200,
               height: 200,
               fit: BoxFit.cover,

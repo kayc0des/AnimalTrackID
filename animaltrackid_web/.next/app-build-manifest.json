@@ -3,7 +3,6 @@
     "/(main)/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/(main)/page.css",
       "static/chunks/app/(main)/page.js"
     ],
     "/(main)/layout": [
@@ -26,16 +25,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(main)/tracks/page.js"
-    ],
-    "/(main)/datasets/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(main)/datasets/page.js"
-    ],
-    "/(main)/users/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(main)/users/page.js"
     ]
   }
 }

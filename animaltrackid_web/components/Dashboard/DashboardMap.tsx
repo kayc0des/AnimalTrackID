@@ -5,12 +5,15 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// Example species data
-const speciesData = [
-  { id: 1, name: "Species A", lat: -1.2921, lng: 36.8219, color: "green" },
-  { id: 2, name: "Species B", lat: -0.2921, lng: 36.7219, color: "red" },
-  { id: 3, name: "Species C", lat: -1.0921, lng: 36.9219, color: "yellow" },
-];
+// Define species colors
+const speciesColors: { [key: string]: string } = {
+  Lion: "red",
+  Horse: "blue",
+  Elephant: "green",
+  Muledeer: "orange",
+  Turkey: "purple",
+  Otter: "yellow",
+};
 
 // Function to generate a custom map icon
 const getCustomIcon = (color: string): L.DivIcon => {
@@ -20,7 +23,19 @@ const getCustomIcon = (color: string): L.DivIcon => {
   });
 };
 
-const MapComponent = () => {
+interface SpeciesData {
+  [key: string]: { latitude: number; longitude: number }[];
+}
+
+interface MapComponentProps {
+  speciesData: SpeciesData;
+}
+
+const MapComponent = ({ speciesData }: MapComponentProps) => {
+  if (Object.keys(speciesData).length === 0) {
+    return <p>Loading map data...</p>;
+  }
+
   return (
     <Card className="w-full mt-6 max-h-full h-[70vh] md:h-[65vh] rounded-3xl border-none">
       <CardHeader>
@@ -31,22 +46,24 @@ const MapComponent = () => {
       <CardContent>
         <div className="w-full h-[550px]">
           <MapContainer
-            center={[speciesData[0].lat, speciesData[0].lng]}
-            zoom={5}
+            center={[-1.93080, 30.14403]}
+            zoom={15}
             style={{ width: "100%", height: "100%", borderRadius: "12px" }}
           >
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {speciesData.map((species) => (
-              <Marker
-                key={species.id}
-                position={[species.lat, species.lng]}
-                icon={getCustomIcon(species.color)}
-              >
-                <Popup>{species.name}</Popup>
-              </Marker>
-            ))}
+            {Object.entries(speciesData).map(([species, locations]) =>
+              locations.map((location, index) => (
+                <Marker
+                  key={`${species}-${index}`}
+                  position={[location.latitude, location.longitude]}
+                  icon={getCustomIcon(speciesColors[species] || "gray")}
+                >
+                  <Popup>{species}</Popup>
+                </Marker>
+              ))
+            )}
           </MapContainer>
         </div>
       </CardContent>

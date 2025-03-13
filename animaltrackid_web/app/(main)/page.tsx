@@ -4,17 +4,23 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ChevronsUp, ChevronsDown, Users, Footprints, Boxes } from "lucide-react";
 import DashboardCard from "@/components/Dashboard/DashboardCard";
-import MapComponent from "@/components/Dashboard/DashboardMap";
+import dynamic from "next/dynamic";
 import DashboardGreeting from "@/components/Dashboard/DashboardGreeting";
+
+// Dynamically import MapComponent with SSR disabled
+const MapComponent = dynamic(() => import("@/components/Dashboard/DashboardMap"), {
+  ssr: false,
+});
 
 export default function Home() {
   const [submissionCount, setSubmissionCount] = useState<number | null>(null);
   const [trackCount, setTrackCount] = useState<number | null>(null);
-  const [userCount, setUserCount] = useState<number | null>(null); // New state for user count
+  const [userCount, setUserCount] = useState<number | null>(null); 
+  const [speciesData, setSpeciesData] = useState<{ [key: string]: { latitude: number; longitude: number }[] }>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchCounts() {
+    async function fetchData() {
       try {
         // Fetch submission count
         const submissionResponse = await fetch("http://localhost:8000/countsubmission");
@@ -30,14 +36,19 @@ export default function Home() {
         const userResponse = await fetch("http://localhost:8000/user-count");
         const userData = await userResponse.json();
         setUserCount(userData.user_count);
+
+        // Fetch species locations
+        const speciesResponse = await fetch("http://localhost:8000/tracks-species-locations");
+        const speciesData = await speciesResponse.json();
+        setSpeciesData(speciesData);
       } catch (error) {
-        console.error("Error fetching counts:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchCounts();
+    fetchData();
   }, []);
 
   if (loading) {
@@ -52,7 +63,7 @@ export default function Home() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-[100%]">
         <DashboardCard
           title="Total Tracks Found"
-          count={trackCount || 0} // Fallback to 0 if trackCount is null
+          count={trackCount || 0}
           percentage={3.14}
           icon={
             <div className="cardIcon bg-successGreen rounded-full p-6">
@@ -65,7 +76,7 @@ export default function Home() {
         />
         <DashboardCard
           title="Total Data Submitted"
-          count={submissionCount || 0} // Fallback to 0 if submissionCount is null
+          count={submissionCount || 0}
           percentage={2.14}
           icon={
             <div className="cardIcon bg-yellowLight rounded-full p-6">
@@ -91,7 +102,7 @@ export default function Home() {
         />
       </div>
       <div className="h-[70vh]">
-        <MapComponent />
+        <MapComponent speciesData={speciesData} />
       </div>
     </div>
   );

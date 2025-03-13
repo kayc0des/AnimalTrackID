@@ -16,6 +16,7 @@ class SplashScreenOne extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: OnboardingAppBar(
         onSkipPressed: () {
           Navigator.pushReplacementNamed(context, '/login');
