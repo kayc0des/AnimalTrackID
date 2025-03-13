@@ -16,8 +16,9 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         automaticallyImplyLeading: false, // Removes back button
-        backgroundColor: Colors.transparent,
+        // backgroundColor: Colors.transparent,
         elevation: 0,
         title: Padding(
           padding: const EdgeInsets.only(left: 16.0),

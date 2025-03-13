@@ -15,6 +15,7 @@ class SubmitScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: InfoAppBar(
         onInfoPressed: () {
           Navigator.of(context).pushReplacement(

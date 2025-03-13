@@ -20,6 +20,7 @@ class ClassificationResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: ReturnAppBar(
         onBackPressed: () {
           Navigator.pushReplacementNamed(context, '/track');

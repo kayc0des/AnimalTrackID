@@ -85,6 +85,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Stack(
       children: [
         Scaffold(
+          backgroundColor: Colors.white,
           appBar: ReturnAppBar(
             onBackPressed: () {
               Navigator.pushReplacementNamed(context, '/login');

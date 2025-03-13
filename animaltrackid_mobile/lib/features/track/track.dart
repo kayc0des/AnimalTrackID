@@ -196,6 +196,7 @@ class _TrackScreenState extends State<TrackScreen> {
     return Stack(
       children: [
         Scaffold(
+          backgroundColor: Colors.white,
           appBar: InfoAppBar(
             onInfoPressed: () {},
           ),
