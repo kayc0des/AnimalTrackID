@@ -46,8 +46,8 @@ const MapComponent = ({ speciesData }: MapComponentProps) => {
       <CardContent>
         <div className="w-full h-[550px]">
           <MapContainer
-            center={[37.785834, -122.406417]} // Default center (can be adjusted)
-            zoom={5}
+            center={[-1.93080, 30.14403]}
+            zoom={15}
             style={{ width: "100%", height: "100%", borderRadius: "12px" }}
           >
             <TileLayer
