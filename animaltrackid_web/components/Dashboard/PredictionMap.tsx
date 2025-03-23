@@ -29,10 +29,11 @@ interface SpeciesData {
 
 interface MapComponentProps {
   speciesData: SpeciesData;
+  predictions?: { latitude: number; longitude: number }[]; // New predictions
 }
 
-const MapComponent = ({ speciesData }: MapComponentProps) => {
-  if (Object.keys(speciesData).length === 0) {
+const MapComponent = ({ speciesData, predictions = [] }: MapComponentProps) => {
+  if (Object.keys(speciesData).length === 0 && predictions.length === 0) {
     return <p>Loading map data...</p>;
   }
 
@@ -40,19 +41,21 @@ const MapComponent = ({ speciesData }: MapComponentProps) => {
     <Card className="w-full mt-6 max-h-full h-[70vh] md:h-[65vh] rounded-3xl border-none">
       <CardHeader>
         <div className="flex flex-col md:flex-row md:items-center justify-between pt-2 pb-4">
-          <p className="text-3xl font-semibold">Track Sightings</p>
+          <p className="text-1xl font-semibold">Sightings (Aug-Jan 2025)</p>
         </div>
       </CardHeader>
       <CardContent>
         <div className="w-full h-[550px]">
           <MapContainer
-            center={[-1.93080, 30.14403]}
-            zoom={15}
+            center={[-2.177549, 29.334935]}
+            zoom={30}
             style={{ width: "100%", height: "100%", borderRadius: "12px" }}
           >
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+
+            {/* Plot original species data */}
             {Object.entries(speciesData).map(([species, locations]) =>
               locations.map((location, index) => (
                 <Marker
@@ -64,6 +67,17 @@ const MapComponent = ({ speciesData }: MapComponentProps) => {
                 </Marker>
               ))
             )}
+
+            {/* Plot new predictions (blue dots) */}
+            {predictions.map((prediction, index) => (
+              <Marker
+                key={`prediction-${index}`}
+                position={[prediction.latitude, prediction.longitude]}
+                icon={getCustomIcon("blue")} // Blue dots for predictions
+              >
+                <Popup>Prediction {index + 1}</Popup>
+              </Marker>
+            ))}
           </MapContainer>
         </div>
       </CardContent>

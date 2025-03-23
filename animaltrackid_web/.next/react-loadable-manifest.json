@@ -1,4 +1,11 @@
 {
+  "app/(main)/lstm/page.tsx -> @/components/Dashboard/PredictionMap": {
+    "id": "app/(main)/lstm/page.tsx -> @/components/Dashboard/PredictionMap",
+    "files": [
+      "static/css/_app-pages-browser_components_Dashboard_PredictionMap_tsx.css",
+      "static/chunks/_app-pages-browser_components_Dashboard_PredictionMap_tsx.js"
+    ]
+  },
   "app/(main)/page.tsx -> @/components/Dashboard/DashboardMap": {
     "id": "app/(main)/page.tsx -> @/components/Dashboard/DashboardMap",
     "files": [

@@ -6,6 +6,7 @@ from services.weather import WeatherService
 from pydantic import BaseModel
 from datetime import datetime
 from connection import connect_db
+import joblib
 import os
 import cloudinary
 import cloudinary.uploader
@@ -14,7 +15,9 @@ from fastapi.middleware.cors import CORSMiddleware
 import io
 import csv
 from firebase_admin import auth
-from firebase_init import initialize_firebase  # Import the Firebase initialization function
+from services.lstmpredict import predict_from_csv 
+from firebase_init import initialize_firebase # Import the Firebase initialization function
+import pandas as pd
 
 # Initialize Firebase
 initialize_firebase()
@@ -38,6 +41,9 @@ cloudinary.config(
     api_secret = os.getenv("API_SECRET_KEY"),
     secure=True
 )
+
+SCALER_PATH = "scaler/lat_lon_scaler.pkl"
+lat_lon_scaler = joblib.load(SCALER_PATH)
 
 class PredictionResponse(BaseModel):
     species_name: str
@@ -336,3 +342,40 @@ async def get_user_count():
         return {"user_count": user_count}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching user count: {str(e)}")
+    
+@app.get("/lion", response_model=list[dict])
+async def get_lion_data():
+    conn = None
+    try:
+        # Connect to the database
+        conn = await connect_db()
+        if not conn:
+            raise HTTPException(status_code=500, detail="Failed to connect to the database")
+
+        # Fetch all rows from the lion table
+        rows = await conn.fetch("SELECT * FROM lion")
+
+        # Convert rows to a list of dictionaries
+        result = [dict(row) for row in rows]
+
+        return result
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching user count: {str(e)}")
+    finally:
+        # Close the database connection
+        if conn:
+            await conn.close()
+            
+@app.post("/lstmpredict")
+async def lstmpredict(file: UploadFile = File(...)):
+    try:
+        # Read the uploaded CSV file
+        contents = await file.read()
+
+        # Call the prediction function from the service
+        predictions = predict_from_csv(contents)
+
+        return JSONResponse(content={"predictions": predictions})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
