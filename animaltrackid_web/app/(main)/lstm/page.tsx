@@ -1,122 +1,117 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DataTable } from "@/components/ui/data-table";
-import { Payments, columns } from "./columns";
+"use client";
 
-async function getData(): Promise<Payments[]> {
-  return [
-    {
-      id: "7303083839jdkd",
-      vendorId: "0387639xnks",
-      amount: 409583,
-      status: "processing",
-      date: new Date("2024-04-24"),
-    },
-    {
-      id: "7303083839jdkd",
-      vendorId: "038393dmc",
-      amount: 630893,
-      status: "successful",
-      date: new Date("2023-12-24"),
-    },
-    {
-      id: "7303083839jdkd",
-      vendorId: "0387639xnks",
-      amount: 92738,
-      status: "processing",
-      date: new Date("2024-04-24"),
-    },
-    {
-      id: "7303083839jdkd",
-      vendorId: "038393dmc",
-      amount: 3943939,
-      status: "failed",
-      date: new Date("2024-03-14"),
-    },
-    {
-      id: "7303083839jdkd",
-      vendorId: "038393dmc",
-      amount: 388920,
-      status: "successful",
-      date: new Date("2024-02-29"),
-    },
-  ];
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+
+// Dynamically import MapComponent with SSR disabled
+const MapComponent = dynamic(() => import("@/components/Dashboard/PredictionMap"), {
+  ssr: false,
+});
+
+interface LionData {
+  key: string;
+  latitude: number;
+  longitude: number;
 }
 
-async function PaymentsPage() {
-  const allPayments = await getData();
-  const successfulPayments = allPayments.filter(
-    (item) => item.status == "successful"
-  );
-  const processingPayments = allPayments.filter(
-    (item) => item.status == "processing"
-  );
-  const failedPayments = allPayments.filter(
-    (item) => item.status == "failed"
-  );
+interface Prediction {
+  latitude: number;
+  longitude: number;
+}
+
+export default function LionPage() {
+  const [lionData, setLionData] = useState<LionData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [file, setFile] = useState<File | null>(null);
+  const [predictions, setPredictions] = useState<Prediction[]>([]); // State for new predictions
+
+  useEffect(() => {
+    async function fetchLionData() {
+      try {
+        // Fetch lion data
+        const response = await fetch("http://localhost:8000/lion");
+        const data = await response.json();
+        setLionData(data);
+      } catch (error) {
+        console.error("Error fetching lion data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchLionData();
+  }, []);
+
+  // Handle file upload
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setFile(event.target.files[0]);
+    }
+  };
+
+  // Handle prediction
+  const handlePredict = async () => {
+    if (!file) {
+      alert("Please upload a CSV file first.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("http://localhost:8000/lstmpredict", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to predict next month's data.");
+      }
+
+      const result = await response.json();
+      console.log("Prediction result:", result);
+      setPredictions(result.predictions); // Store the new predictions
+    } catch (error) {
+      console.error("Error predicting next month's data:", error);
+      alert("Error predicting next month's data. Please try again.");
+    }
+  };
+
+  if (loading) {
+    return <p>Loading lion data...</p>;
+  }
+
   return (
-    <div>
-      <div>
-        <Tabs defaultValue="allPayments" className="w-[100%]">
-          <TabsList className="bg-transparent grid grid-cols-4 gap-5">
-            <TabsTrigger
-              value="allPayments"
-              className="flex justify-between px-3 py-4 rounded-lg border text-base border-gray-200 tabTrigger"
-            >
-              <span>All Payments</span>
-              <span>{allPayments.length}</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="processing"
-              className="flex justify-between px-3 py-4 rounded-lg border text-base border-gray-200 tabTrigger"
-            >
-              <span>Processing</span>
-              <span>{processingPayments.length}</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="successful"
-              className="flex justify-between px-3 py-4 rounded-lg border text-base border-gray-200 tabTrigger"
-            >
-              <span>Successful Payments</span>
-              <span>{successfulPayments.length}</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="failed"
-              className="flex justify-between px-3 py-4 rounded-lg border text-base border-gray-200 tabTrigger"
-            >
-              <span>Failed Payments</span>
-              <span>{failedPayments.length}</span>
-            </TabsTrigger>
-          </TabsList>
+    <div className="container mx-auto py-10">
+      <h1 className="text-3xl font-bold mb-6">Aug-Jan 2025 Tracks</h1>
 
-          <TabsContent value="allPayments" className="mt-6">
-            <DataTable columns={columns} data={allPayments} numberOfRows={10} />
-          </TabsContent>
+      {/* Upload CSV File and Predict Button */}
+      <div className="mb-6">
+        <div className="flex items-center gap-4">
+          <input
+            type="file"
+            accept=".csv"
+            onChange={handleFileChange}
+            className="border p-2 rounded"
+          />
+          <button
+            onClick={handlePredict}
+            style={{ backgroundColor: "#003728" }} // Custom button color
+            className="text-white px-4 py-2 rounded hover:bg-opacity-90 transition-all"
+          >
+            Predict Next Month
+          </button>
+        </div>
+      </div>
 
-          <TabsContent value="processing" className="mt-6">
-            <DataTable
-              columns={columns}
-              data={processingPayments}
-              numberOfRows={10}
-            />
-          </TabsContent>
-          <TabsContent value="successful" className="mt-6">
-            <DataTable
-              columns={columns}
-              data={successfulPayments}
-              numberOfRows={10}
-            />
-          </TabsContent>
-          <TabsContent value="failed" className="mt-6">
-            <DataTable
-              columns={columns}
-              data={failedPayments}
-              numberOfRows={10}
-            />
-          </TabsContent>
-        </Tabs>
+      {/* Map Component */}
+      <div className="h-[70vh]">
+        <MapComponent
+          speciesData={{ Lion: lionData }} // Original lion data (red dots)
+          predictions={predictions} // New predictions (blue dots)
+        />
       </div>
     </div>
   );
 }
-
-export default PaymentsPage;
