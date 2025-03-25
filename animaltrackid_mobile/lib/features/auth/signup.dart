@@ -153,8 +153,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               SignUpNav(
+                onPrivacyPressed: () {
+                  Navigator.pushReplacementNamed(context, '/privacy');
+                },
                 onTermsPressed: () {
-                  Navigator.pushReplacementNamed(context, '/signup');
+                  Navigator.pushReplacementNamed(context, '/terms');
                 },
               ),
               const SizedBox(height: 16),

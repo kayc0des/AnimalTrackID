@@ -66,11 +66,18 @@ class ProfileScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  _buildProfileOption(context, "About AnimalTrackID", () {}),
+                  _buildProfileOption(context, "Terms & Condition", () {
+                    Navigator.pushReplacementNamed(
+                        context, '/termsandconditions');
+                  }),
                   _buildDivider(),
-                  _buildProfileOption(context, "Terms & Condition", () {}),
+                  _buildProfileOption(context, "Privacy Policy", () {
+                    Navigator.pushReplacementNamed(context, '/privacypolicy');
+                  }),
                   _buildDivider(),
-                  _buildProfileOption(context, "App Version", () {}),
+                  _buildProfileOption(context, "Copyright Notice", () {
+                    Navigator.pushReplacementNamed(context, '/copyright');
+                  }),
                 ],
               ),
             ),

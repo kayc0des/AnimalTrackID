@@ -6,6 +6,8 @@ import 'features/onboarding/splashscreen_two.dart';
 import 'features/onboarding/splashscreen_three.dart';
 import 'features/auth/login.dart';
 import 'features/auth/signup.dart';
+import 'features/ethics/privacy.dart';
+import 'features/ethics/terms.dart';
 import 'features/home/home.dart';
 import 'features/profile/profile.dart';
 import 'features/track/track.dart';
@@ -14,6 +16,9 @@ import 'features/submit/submitform.dart';
 import 'features/reusables/transition.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'features/profile/copyright.dart';
+import 'features/profile/termsandconditions.dart';
+import 'features/profile/privacypolicy.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,6 +57,16 @@ class MyApp extends StatelessWidget {
             return FadePageRoute(page: const LoginScreen());
           case '/signup':
             return FadePageRoute(page: const SignUpScreen());
+          case '/termsandconditions':
+            return FadePageRoute(page: const TermsAndConditionsScreen());
+          case '/copyright':
+            return FadePageRoute(page: const CopyrightScreen());
+          case '/privacypolicy':
+            return FadePageRoute(page: const PrivacyScreen());
+          case '/terms':
+            return FadePageRoute(page: const TermsScreen());
+          case '/privacy':
+            return FadePageRoute(page: const PrivacyPolicyScreen());
           case '/adddata':
             return FadePageRoute(page: const SubmitFormScreen());
           case '/home':
