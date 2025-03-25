@@ -52,9 +52,14 @@ class AuthNavBar extends StatelessWidget {
 }
 
 class SignUpNav extends StatelessWidget {
+  final VoidCallback onPrivacyPressed;
   final VoidCallback onTermsPressed;
 
-  const SignUpNav({super.key, required this.onTermsPressed});
+  const SignUpNav({
+    super.key,
+    required this.onPrivacyPressed,
+    required this.onTermsPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -68,30 +73,43 @@ class SignUpNav extends StatelessWidget {
         const SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.only(bottom: 48),
-          child: GestureDetector(
-            onTap: onTermsPressed,
-            child: RichText(
-              text: TextSpan(
-                text: "Please Read Our ",
-                style: const TextStyle(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: onPrivacyPressed,
+                child: Text(
+                  "Privacy Policy",
+                  style: const TextStyle(
+                    fontFamily: FontConstants.fontFamily,
+                    fontSize: FontConstants.body,
+                    fontWeight: FontConstants.mediumWeight,
+                    color: AppColors.primaryColor,
+                  ),
+                ),
+              ),
+              const Text(
+                " and ",
+                style: TextStyle(
                   fontFamily: FontConstants.fontFamily,
                   fontSize: FontConstants.body,
                   fontWeight: FontConstants.regular,
                   color: AppColors.textColor,
                 ),
-                children: [
-                  TextSpan(
-                    text: 'Terms & Conditions',
-                    style: const TextStyle(
-                      fontFamily: FontConstants.fontFamily,
-                      fontSize: FontConstants.body,
-                      fontWeight: FontConstants.mediumWeight,
-                      color: AppColors.primaryColor,
-                    ),
-                  ),
-                ],
               ),
-            ),
+              GestureDetector(
+                onTap: onTermsPressed,
+                child: Text(
+                  "Terms & Conditions",
+                  style: const TextStyle(
+                    fontFamily: FontConstants.fontFamily,
+                    fontSize: FontConstants.body,
+                    fontWeight: FontConstants.mediumWeight,
+                    color: AppColors.primaryColor,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],
