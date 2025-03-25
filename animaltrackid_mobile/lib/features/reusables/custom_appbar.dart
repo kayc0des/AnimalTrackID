@@ -165,3 +165,44 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
+
+//------- Return with text ------//
+class ReturnTextAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final VoidCallback onBackPressed;
+  final String title;
+
+  const ReturnTextAppBar(
+      {super.key, required this.onBackPressed, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      leading: IconButton(
+        onPressed: onBackPressed,
+        icon: SvgPicture.asset(
+          AppIcons.arrowLeft,
+          width: 24,
+          height: 24,
+          colorFilter:
+              const ColorFilter.mode(AppColors.textColor, BlendMode.srcIn),
+        ),
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontFamily: FontConstants.fontFamily,
+          fontSize: FontConstants.body,
+          fontWeight: FontConstants.mediumWeight,
+          color: AppColors.textColor,
+        ),
+      ),
+      centerTitle: true,
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
