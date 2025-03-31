@@ -85,7 +85,7 @@ class ClassificationResultScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     _buildReportRow(
-                        "Specie Found", classificationData["species_name"]),
+                        "Species Found", classificationData["species_name"]),
                     _buildDivider(),
                     _buildReportRow(
                         "Latitude", classificationData["latitude"].toString()),
