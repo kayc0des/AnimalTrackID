@@ -12,6 +12,7 @@ import '../../utils/constants/icons.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/fonts.dart';
 import '../../utils/helpers/getid.dart';
+import '../../features/reusables/activitycount.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -80,6 +81,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 24),
+
+              // Add the ActivityCount component here
+              ActivityCount(
+                firstLabel: "Tracks Found",
+                firstCount: _tracks.length, // Dynamic count from your data
+                firstIconPath: AppIcons.trackIcon,
+                secondLabel: "Submissions",
+                secondCount: 8, // You might want to make this dynamic too
+                secondIconPath: AppIcons.submitIcon,
+              ),
+              const SizedBox(height: 24),
+
               TextBoxLeft(headerText: 'Track History'),
               const SizedBox(height: 12),
               _isLoading
@@ -100,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         )
                       : Container(
                           constraints: const BoxConstraints(
-                            maxHeight: 200, // Adjusted height for ~4 items
+                            maxHeight: 300, // Adjusted height for ~4 items
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           decoration: BoxDecoration(
@@ -110,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: SingleChildScrollView(
                             child: Column(
                               children: List.generate(
-                                _tracks.length > 4 ? 4 : _tracks.length,
+                                _tracks.length,
                                 (index) {
                                   var track = _tracks[index];
                                   return Column(
