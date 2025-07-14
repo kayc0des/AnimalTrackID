@@ -1,4 +1,4 @@
-// File: /Users/kingsleybudu/dev/capstone_project/AnimalTrackID/animaltrackid_web/app/(main)/layout.tsx
+// File: /Users/kingsleybudu/dev/capstone/AnimalTrackID/animaltrackid_web/app/(main)/layout.tsx
 import * as entry from '../../../../app/(main)/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

@@ -3,11 +3,11 @@ import requests
 from dotenv import load_dotenv
 import json
 
-load_dotenv()  # Load environment variables from .env file
+load_dotenv()
 
 class WeatherService:
     def __init__(self):
-        self.api_key = os.getenv("WEATHER_API_KEY")  # Get API key from environment
+        self.api_key = os.getenv("WEATHER_API_KEY")
         self.base_url = "https://api.openweathermap.org/data/3.0/onecall"
 
     def get_weather(self, latitude: float, longitude: float) -> dict:

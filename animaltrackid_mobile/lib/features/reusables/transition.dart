@@ -43,9 +43,4 @@ class FadePageRoute<T> extends PageRouteBuilder<T> {
 
   @override
   bool get canPop => !disableBackButton;
-
-  @override
-  TickerFuture didPush() {
-    return super.didPush(); // ✅ Remove `removeRouteBelow`
-  }
 }

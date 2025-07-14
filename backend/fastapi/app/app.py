@@ -16,7 +16,7 @@ import io
 import csv
 from firebase_admin import auth
 from services.lstmpredict import predict_from_csv 
-from firebase_init import initialize_firebase # Import the Firebase initialization function
+from firebase_init import initialize_firebase
 import pandas as pd
 
 # Initialize Firebase
@@ -29,7 +29,7 @@ weather_service = WeatherService()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Allow requests from Next.js app
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
